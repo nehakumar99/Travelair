@@ -1,0 +1,52 @@
+<%- include("partials/header") %>
+<div class="container-fluid justify-content-center" id="signup">
+<div class="container-custom row">
+  <div class="col-12"><h2>Sign Up with Travelair</h2></div>
+  <div class="col-12 col-md-4">
+  <img src="images/signupimg.jpg" class="form-image">
+  </div>
+  <div class="col-12 col-md-8">
+    <form class="signup-form" action="/signup" method="post">
+      <div class="row row-content">
+        <div class="col-12 col-md-6">
+          <input type="text" class="form-control" placeholder="First name">
+        </div>
+        <div class="col-12 col-md-6">
+          <input type="text" class="form-control" placeholder="Last name">
+        </div>
+      </div>
+      <div class="row row-content">
+        <div class="col-12 col-md-6">
+          <input type="email" class="form-control" placeholder="Email">
+        </div>
+        <div class="col-12 col-md-6">
+          <input type="text" class="form-control" placeholder="Mobile Number">
+        </div>
+      </div>
+      <div class="row row-content">
+        <div class="col-12 col-md-6">
+          <input type="password" class="form-control" placeholder="Enter Password">
+        </div>
+        <div class="col-12 col-md-6">
+          <input type="password" class="form-control" placeholder="Confirm Password">
+        </div>
+      </div>
+      <div class="row row-content">
+        <div class="col-12 col-md-4 offset-2">
+          <label><i class="fa fa-birthday-cake mr-2" aria-hidden="true"></i>Date of Birth</label>
+        </div>
+        <div class="col-12 col-md-6">
+          <input type="date" class="form-control">
+        </div>
+      </div>
+      <div class="row row-content text-center">
+        <div class="col">
+          <button type="submit" class="btn btn-outline-primary">Sign Up</button>
+        </div>
+      </div>
+    </form>  
+  </div>
+</div>
+</div>
+
+<%- include("partials/footer") %>

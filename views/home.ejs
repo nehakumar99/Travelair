@@ -1,0 +1,92 @@
+ <%- include("partials/header") %>
+ 
+    <!-- carousel  -->
+    <div id="carouselPages" class="carousel slide carousel-fade" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active data-interval=2000">
+          <img src="images/carouselpic1.jpg" class="d-block w-100">
+          <div class="carousel-caption">
+            <h1> <i class="fas fa-plane-departure"></i><span>T</span>ravelair</h1>
+            <p>Your complete flight booking partner</p>
+          </div>
+        </div>
+        <div class="carousel-item data-interval=2000">
+          <img src="images/carouselpic2.jpg" class="d-block w-100">
+          <div class="carousel-caption carousel-caption-custom">
+            <h4>Welcome to our service!Please login or signup.</h4>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Login</button>
+           <a href="/signup"><button type="button" class="btn bg-dark" style="color: white;">Sign Up</button></a> 
+          </div>
+        </div>
+        <div class="carousel-item data-interval=2000">
+          <img src="images/carouselpic3.jpg" class="d-block w-100">
+          <div class="carousel-caption carousel-caption-custom">
+            <h4> Cancel your tickets without third party cancellation charges.</h4>
+          </div>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselPages" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselPages" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+   </div>
+
+  <!-- our services section  -->
+  <div class="container-fluid div-content" id="service">
+      <h1>Our services</h1>
+      <div class="row">
+        <div class="col-custom col-12 col-md-6">
+          <img src="images/easybook.jpg">
+        </div>
+        <div class="col-custom col-caption col-12 col-md-6">
+          <h2>Easy Booking</h2>
+          <p>This system allows easy booking of flight tickets without asking for too much of unnecessary details.
+            All you need for booking your tickets are valid documents, a device with internet connection and a travel plan.
+         Have a travel plan? Book your tickets now! <br>
+         <button class="btn btn-primary" type="button">Book</button>
+        </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-custom col-caption col-12 col-md-6">
+          <h2>E-Ticket Available</h2>
+          <p>Dont worry about forgetting your tickets anymore.Our website will immediately generate an electronic ticket or soft copy of your ticket which are now acceptable at airports wihtout the need of printing it.This way we make sure that less paper is disposed in our environemnt.
+        </p>
+        </div>
+        <div class="col-custom col-12 col-md-6">
+          <img src="images/eticket.jpg">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-custom col-12 col-md-6">
+          <img src="images/cancelled.jpg">
+        </div>
+        <div class="col-custom col-caption col-12 col-md-6">
+          <h2>Easy Cancellation</h2>
+          <p>This system allows easy cancellation of flight tickets.
+            All you need for cancelling your tickets are just a few clicks.There shall not be any cancellation charges if booked using Travelair.There are no hidden charges for cancellation of tickets but it must be done 3 days earlier in order to avoid cancellation charges set by the flight you have chosen.
+        </p>
+        </div>
+      </div>
+    </div>
+<!-- this is the location recommendation system  -->
+<div class="container-custom"></div>
+<!-- this is the about us section  -->
+<div class="container-fluid div-content" id="about">
+  <h1>About Us</h1>
+  <div class="row">
+    <div class="col-12 col-md-6 col-custom">
+      <img src="images/fakeme.jpg">
+    </div>
+    <div class="col-12 col-md-6 col-custom col-caption">
+      <h3>Neha Kumar, Creator of Travelair</h3>
+      <p>I have graduated from Techno Main Saltlake,Kolkata,West Bengal.This project is an improvisation of our final year major project.For this website, I made use of technologies such as PHPMyAdmin,NodeJS,EJS and many more. I have completed my Full Stack Web Development course from Udemy in March,2020. I am currently engaged in learning Full Stack using React from Coursera.</p>
+    </div>
+  </div>
+</div>
+
+ <%- include("partials/footer") %>

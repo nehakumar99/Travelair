@@ -1,0 +1,23 @@
+{
+  "name": "projecttravelair",
+  "version": "1.0.0",
+  "description": "This is mt project for flight reservation system",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Neha Kumar",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.5.0",
+    "bootstrap-social": "^5.1.1",
+    "ejs": "^3.1.3",
+    "express": "^4.17.1",
+    "font-awesome": "^4.7.0",
+    "i": "^0.3.6",
+    "jquery": "^1.9.1",
+    "mysql": "^2.18.1",
+    "npm": "^6.14.6",
+    "popper.js": "^1.16.0"
+  }
+}

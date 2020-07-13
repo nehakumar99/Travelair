@@ -1,0 +1,153 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+h2{
+    margin: 0;
+    padding: 0;
+}
+.div-content{
+ padding: 50px;
+}
+.div-content h1
+{
+    margin: 0 auto;
+    width: max-content;
+    color: #424242;
+    border-bottom: 2px solid #42A5F5;
+}
+/* styling the navbar and carousel  */
+.fa-plane-departure{
+    margin-right: 5px;
+}
+.carousel-item img{
+  object-position: center;
+}
+nav{
+    font-size: larger;
+}
+.navbar-brand{
+ font-size: larger;
+}
+.nav-link{
+    padding-bottom: 5px;
+}
+.nav-link:hover , .navbar-brand:hover{
+    color: #42A5F5;
+}
+.nav-link:hover{
+border-bottom: 2px solid  #42A5F5;
+}
+.dropdown-menu
+{
+    border: none;
+    outline: none;
+    color: white;
+    width:max-content;
+    transition: all 0.4s ease-in-out;
+}
+.dropdown-item:hover
+{
+color: #42A5F5;
+}
+.carousel-item img{
+    filter: grayscale(60%);
+}
+.carousel-caption{
+    position: absolute;
+    top: 20%;
+}
+.carousel-caption h1{
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 0;
+    padding: 0  5px;
+    width: max-content;
+    font-weight: bolder;
+    font-size: 100px;
+    margin: 0 auto;
+}
+.carousel-caption p{
+    width: max-content;
+    background-color: rgba(0, 0, 0, 0.5);
+      font-size: 20px;
+    margin: 10px auto;
+    padding: 5px;
+}
+.carousel-caption-custom
+{
+    background-color: rgba(255, 255, 255, 0.671);
+    max-width: fit-content;
+    max-height: fit-content;
+    margin: 50px auto;
+    color:#424242;
+    padding: 10px;
+    border-radius: 4px;
+}
+#loginModal .modal-header{
+    background-color: #42A5F5;
+    color: white;
+}
+
+/* styling our services section  */
+#service h1{
+    margin-bottom: 30px;
+}
+.col-custom{
+    margin-top: 50px;
+}
+.col-custom img{
+    width: 350px;
+    height: 250px;
+    border: 5px solid #42A5F5;
+}
+.col-custom h2{
+    color: #42A5F5;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #424442;
+}
+#service .row{
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.col-caption h3{
+    border-bottom:2px solid #42A5F5;
+}
+/* styling out footer section  */
+.form{
+    width: 70%;
+    padding: 80px;
+}
+#footer{
+    background-color: #424442;
+    color: #42A5F5;
+    padding-bottom: 10px;
+}
+#footer h2{
+    color: white;
+    width: max-content;
+    padding: 10px 3px 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #42A5F5;
+    margin: 20px auto;
+}
+.footer-icon{
+    color: white;
+}
+ /* styling the signup page  */
+ .container-custom{
+     padding: 100px;
+     /* background-image: -webkit-linear-gradient(#0075FE,#42A5F5); */
+ }
+/* .signup-form{
+    background-image: -webkit-linear-gradient(#0075FE,#42A5F5);
+} */
+label{
+    color: #0075FE;
+}
+.row-content{
+    padding: 5px;
+}
+img.form-img {
+    height: 200px;
+    width: 250px;
+}
