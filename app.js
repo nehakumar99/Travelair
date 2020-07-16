@@ -13,6 +13,7 @@ app.use(express.static(__dirname + '/public'));
 //globally used variables
 let locationRecommendations=[];
 let userExists = false;
+let User;
 //setting up database connection
 const connection = mysql.createConnection({
   host     : 'localhost',
@@ -50,9 +51,27 @@ app.get('/', (req, res) => {
 });
 
 // handling route for login 
-// app.post('/login',(req,res) => {
-// const mail = req.body.
-// });
+app.post('/login',(req,res) => {
+const mail = req.body.useremail;
+const password = req.body.userpassword;
+let findUser = 'SELECT *FROM login_data WHERE EMAIL_ID ='+mysql.escape(mail);
+connection.query(findUser,(error,results) => {
+ if(!error){
+   if(results.length == 0){
+     userExists = false;
+     res.redirect('/');
+   }else{
+     for ( let i in results) {
+     if(results[i].PASSWORD != password){
+       res.redirect('/');
+     }else{
+       res.redirect('/profile');
+     }
+     }
+   }
+ }
+})
+});
 //handling route for sign-up
 app.get('/signup',(req,res) => {
 res.render('signup');
