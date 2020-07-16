@@ -34,7 +34,43 @@
         <span class="sr-only">Next</span>
       </a>
    </div>
-
+<!-- this is the recommendation recommendation system  -->
+<div class="container-fluid text-center container-custom" id="recommendation">
+  <h1><i class="fas fa-directions"></i>Take a Trip</h1>
+  <ul class="nav nav-tabs bg-light" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" id="domestic-tab" data-toggle="tab" href="#domestic" role="tab" aria-controls="home" aria-selected="true">Take Domestic Trip</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="international-tab" data-toggle="tab" href="#international" role="tab" aria-controls="international" aria-selected="false">Take International Trip</a>
+    </li>
+  </ul>
+  <div class="tab-content tab-custom" id="myTabContent">
+    <!-- try using carousel instead of cards  -->
+    <div class="tab-pane fade show active" id="domestic" role="tabpanel" aria-labelledby="domestic-tab">
+      <div class="tabs-area d-flex flex-row justify-content-around">
+        <% recommendations.forEach(item => { %>
+          <% if (item.TYPE=='DOMESTIC') { %>
+           <div class="card" style="width: 22rem;height:15rem;background-image: url('<%= item.URL %>');background-size: cover;">
+               <h5 class="card-title-custom"> <%= item.LOCATION %> <a href="#" class="btn btn-outline-dark">Book Now</a></h5>
+           </div>
+          <% } %>
+         <% }) %>
+      </div>
+    </div>
+    <div class="tab-pane fade tabs-area" id="international" role="tabpanel" aria-labelledby="international-tab">
+     <div class="tabs-area d-flex flex-row justify-content-around">
+      <% recommendations.forEach(item => { %>
+        <% if (item.TYPE=='INTERNATIONAL') { %>
+          <div class="card mt-10 mr-10" style="width: 22rem;height: 15rem;background-image: url('<%= item.URL %>');background-size: cover;">
+              <h5 class="card-title-custom"> <%= item.LOCATION %> <a href="#" class="btn btn-outline-dark">Book Now</a></h5>
+          </div>
+         <% } %>
+         <% }) %>
+     </div>
+    </div>
+  </div>
+  </div>
   <!-- our services section  -->
   <div class="container-fluid div-content" id="service">
       <h1>Our services</h1>
@@ -73,41 +109,54 @@
         </div>
       </div>
     </div>
-<!-- this is the recommendation recommendation system  -->
-<div class="container-fluid text-center" id="recommendation">
-<h1><i class="fas fa-directions"></i>Take a Trip Turn</h1>
-<ul class="nav nav-tabs bg-light" id="myTab" role="tablist">
-  <li class="nav-item" role="presentation">
-    <a class="nav-link active" id="domestic-tab" data-toggle="tab" href="#domestic" role="tab" aria-controls="home" aria-selected="true">Take Domestic Trip</a>
-  </li>
-  <li class="nav-item" role="presentation">
-    <a class="nav-link" id="international-tab" data-toggle="tab" href="#international" role="tab" aria-controls="international" aria-selected="false">Take International Trip</a>
-  </li>
-</ul>
-<div class="tab-content tab-custom" id="myTabContent">
-  <!-- try using carousel instead of cards  -->
-  <div class="tab-pane fade show active" id="domestic" role="tabpanel" aria-labelledby="domestic-tab">
-    <% recommendations.forEach(item => { %>
-     <% if (item.TYPE=='DOMESTIC') { %>
-      <div class="card" style="width: 20rem;">
-        <img src="<%= item.URL %>" class="card-img-top">
-          <h5 class="card-title"> <%= item.LOCATION %> <a href="#" class="btn btn-outline-dark">Book Now</a></h5>
-      </div>
-     <% } %>
-    <% }) %>
-  </div>
-  <div class="tab-pane fade" id="international" role="tabpanel" aria-labelledby="international-tab">
-    <% recommendations.forEach(item => { %>
-      <% if (item.TYPE=='INTERNATIONAL') { %>
-        <div class="card">
-          <img src="<%= item.URL %>" class="card-img-top">
-            <h5 class="card-title"> <%= item.LOCATION %> <a href="#" class="btn btn-outline-dark">Book Now</a></h5>
+
+     <!-- this is the timer section  -->
+<div class="container-fluid container-custom text-center" id="timer">
+  <h1>Travelair Creator<i class="fa fa-birthday-cake mr-1 ml-1" aria-hidden="true"></i> Birthday Sale</h1>
+  <div class="row justify-content-center">
+    <div class="col-auto col-custom">
+      <div class="timer-box">
+        <div class="timer-head">
+         <h1 class="time" id="days"></h1>
         </div>
-       <% } %>
-       <% }) %>
+        <div class="timer-foot">
+         <h2>DAYS</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto col-custom">
+      <div class="timer-box">
+        <div class="timer-head">
+         <h1 class="time" id="hours"></h1>
+        </div>
+        <div class="timer-foot">
+         <h2>HOURS</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto col-custom">
+      <div class="timer-box">
+        <div class="timer-head">
+         <h1 class="time"id="mins"></h1>
+        </div>
+        <div class="timer-foot">
+         <h2>MINS</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto col-custom">
+      <div class="timer-box">
+        <div class="timer-head">
+         <h1 class="time" id="secs"></h1>
+        </div>
+        <div class="timer-foot">
+         <h2>SECS</h2>
+        </div>
+    </div>
   </div>
 </div>
 </div>
+
 <!-- this is the about us section  -->
 <div class="container-fluid div-content" id="about">
   <h1>About Us</h1>
@@ -121,5 +170,5 @@
     </div>
   </div>
 </div>
-
+<script src="/js/timercounter.js"></script>
  <%- include("partials/footer") %>
