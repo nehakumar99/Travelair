@@ -1,0 +1,30 @@
+<%- include("partials/header") %>
+<div class="container-fluid" id="profile-page">
+    <div class="container-custom" id="profile-inner">
+        <div class="row">
+            <div class="col-4 offset-2">
+                <% userInfo.forEach(info => { %>
+                    <h2><%= info.FIRST_NAME %> <%= info.LAST_NAME %> </h2>
+                    <h6><%= info.EMAIL_ID %> </h6>
+                    <h6> <%= info.PHONE_NO %> </h6>
+                    <h6><%= info.BIRTHDAY %> </h6>
+                <% }) %>
+            </div>
+            <div class="col-4 offset-2">
+             <img src="images/fakeme.jpg">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h2 class="mt-0 profile-heading">Edit Profile Details</h2>
+    <div class="row">
+        <div class="col-5 offset-1">
+            <h2> an image with a good desc</h2>
+        </div>
+        <div class="col-5 offset-1">
+            <h1>table of details with edit logo</h1>
+        </div>
+    </div>
+</div>
+<%- include("partials/footer") %>

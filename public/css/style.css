@@ -84,7 +84,7 @@ color: #42A5F5;
     border-radius: 4px;
 }
 #loginModal .modal-header{
-    background-color: #42A5F5;
+    background-image: -webkit-linear-gradient(#0075FE,#42A5F5);
     color: white;
 }
 
@@ -93,14 +93,14 @@ color: #42A5F5;
     margin-bottom: 30px;
 }
 .col-custom{
-    margin-top: 50px;
+    margin-top: 10px;
 }
 .col-custom img{
     width: 350px;
     height: 250px;
     border: 5px solid #42A5F5;
 }
-.col-custom h2{
+.col-custom h2 ,.profile-heading{
     color: #42A5F5;
     padding-bottom: 10px;
     border-bottom: 2px solid #424442;
@@ -112,11 +112,43 @@ color: #42A5F5;
 .col-caption h3{
     border-bottom:2px solid #42A5F5;
 }
-/* styling out footer section  */
-.form{
-    width: 70%;
-    padding: 80px;
+/* styling the locations recommendations  */
+#recommendation ,  .container-custom{
+  background-image: -webkit-linear-gradient(#0075FE,#42A5F5);
+  padding: 50px;
 }
+#recommendation h1 , #timer h1{
+    color: white;
+    padding: 10px;
+}
+.tabs-area{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.card-title-custom{
+    position: absolute;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 100%;
+    margin: 0;
+}
+/* styling the timer section  */
+.timer-box{
+    background-color:#000;
+    width:150px;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border: 5px solid #fff;
+}
+.timer-foot{
+    color: #000;
+    background-color: white;
+    color: #42A5F5;
+}
+/* styling out footer section  */
 #footer{
     background-color: #424442;
     color: #42A5F5;
@@ -133,21 +165,32 @@ color: #42A5F5;
 .footer-icon{
     color: white;
 }
+
  /* styling the signup page  */
- .container-custom{
-     padding: 100px;
-     /* background-image: -webkit-linear-gradient(#0075FE,#42A5F5); */
- }
-/* .signup-form{
-    background-image: -webkit-linear-gradient(#0075FE,#42A5F5);
-} */
-label{
-    color: #0075FE;
+#signup-container{
+    padding: 100px 50px;
 }
-.row-content{
-    padding: 5px;
+#signup-img{
+    background-image: url(/images/signupimg.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
-img.form-img {
-    height: 200px;
-    width: 250px;
+.error-msg{
+    border: 0.5px solid red;
+    color: brown;
+    border-radius: 3px;
+    padding: 2px;
+}
+.feedback{
+    color: red;
+}
+
+/* profile page  */
+#profile-page{
+    padding: 100px 0;
+}
+.profile-heading{
+    width: max-content;
+    margin: 0 auto;
 }

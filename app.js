@@ -1,7 +1,9 @@
 // requiring modules 
+require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const otpGenerator = require('otp-generator');
 
 // setting up the app constant which will make use of express module 
 const app = express();
@@ -13,13 +15,17 @@ app.use(express.static(__dirname + '/public'));
 //globally used variables
 let locationRecommendations=[];
 let userExists = false;
-let User;
+let user;
+let editUser;
+let userInfo =[];
+let passwordOTP;
+let passwordResetMsg;
 //setting up database connection
 const connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'airlines_reservation_system'
+  host     : process.env.DB_HOST,
+  user     : process.env.DB_USER,
+  password : process.env.DB_PASSWORD,
+  database : process.env.DB_NAME
 });
 
 connection.connect(function(err) {
@@ -33,20 +39,17 @@ connection.connect(function(err) {
 
 //handling route for home
 app.get('/', (req, res) => {
-  if(locationRecommendations.length === 0)
-  {
+  if(locationRecommendations.length === 0){
     connection.query("SELECT * FROM pic_data", (error, results) => {
-      if(!error)
-        {
+      if(!error){
         results.forEach(result => {
         locationRecommendations.push(result);   
         });
       }
-      res.redirect('/'); 
-    });
-  }
-  else{
-    res.render('home',{recommendations:locationRecommendations});
+    res.redirect('/'); 
+  });
+}else{
+ res.render('home',{recommendations:locationRecommendations});
   }
 });
 
@@ -65,10 +68,11 @@ connection.query(findUser,(error,results) => {
      if(results[i].PASSWORD != password){
        res.redirect('/');
      }else{
+       user = String(mail);
        res.redirect('/profile');
      }
-     }
-   }
+    }
+  }
  }
 })
 });
@@ -94,6 +98,7 @@ app.post('/signup',(req,res) => {
         if(!error){
           let saveInfo = 'INSERT INTO login_data SET ?';
           connection.query(saveInfo,{EMAIL_ID:mail,PASSWORD:password},(error,results)=>{
+            user = String(mail);
             res.redirect('/profile');
           })
         }
@@ -108,7 +113,70 @@ app.post('/signup',(req,res) => {
 
 //handling route for profile
 app.get('/profile',(req,res) => {
-res.render('profile');
+ let profileQuery = 'SELECT *FROM customer_data WHERE EMAIL_ID = '+ mysql.escape(user);
+ if(userInfo.length == 0){
+  connection.query(profileQuery,(error,results) => {
+    if(!error){
+    results.forEach(result => {
+     userInfo.push(result);
+    });
+  } res.redirect('/profile');
+ })
+ }else{
+  res.render('profile',{userInfo:userInfo});
+ }
+ console.log(userInfo);
 });
+// route handling pages of forgot password
+app.get('/forgotpasswordpg1',(req,res) => {
+passwordOTP="";
+res.render('forgotpasswordpg1',{errorMsg:passwordResetMsg});
+});
+
+app.post('/forgotpasswordpg1',(req,res) => {
+editUser = req.body.mail;
+let findUser = 'SELECT *FROM login_data WHERE EMAIL_ID ='+mysql.escape(editUser);
+connection.query(findUser,(error,results) => {
+if(results.length == 0){
+passwordResetMsg="You dont have an account with this email";
+res.redirect('/forgotpasswordpg1');
+}else{
+  passwordResetMsg="";
+  passwordOTP = otpGenerator.generate(6, { upperCase: false, specialChars: false });
+  res.redirect('/forgotpasswordpg2');
+}
+});
+});
+
+app.get('/forgotpasswordpg2', (req,res) => {
+console.log(passwordOTP);
+res.render('forgotpasswordpg2',{errorMsg:passwordResetMsg});
+});
+
+app.post('/forgotpasswordpg2',(req,res) => {
+if(req.body.otp == passwordOTP){
+  res.redirect('/resetpassword');
+  passwordResetMsg="";
+}else{
+  passwordResetMsg="You entered wrong OTP";
+  res.redirect('/forgotpasswordpg2');
+}
+});
+
+app.get('/resetpassword',(req,res) => {
+res.render('resetpassword');
+});
+
+app.post('/resetpassword', (req,res) => {
+connection.query('UPDATE login_data SET PASSWORD = ? WHERE EMAIL_ID = ?',[req.body.newpassword,editUser], (error) => {
+  if(error) console.log(error);
+  else res.redirect('/resetsuccess');
+})
+});
+
+app.get('/resetsuccess', (req,res) => {
+res.render('resetsuccess');
+});
+
 //app listening on port 4000
 app.listen(4000, () => console.log('App listening on port 4000!'));

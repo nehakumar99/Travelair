@@ -63,7 +63,7 @@
       <% recommendations.forEach(item => { %>
         <% if (item.TYPE=='INTERNATIONAL') { %>
           <div class="card mt-10 mr-10" style="width: 22rem;height: 15rem;background-image: url('<%= item.URL %>');background-size: cover;">
-              <h5 class="card-title-custom"> <%= item.LOCATION %> <a href="#" class="btn btn-outline-dark">Book Now</a></h5>
+              <h5 class="card-title-custom"> <a href="#" class="btn btn-outline-dark">Book ticketicon to <%= item.LOCATION %> </a></h5>
           </div>
          <% } %>
          <% }) %>
@@ -156,7 +156,9 @@
   </div>
 </div>
 </div>
-
+<section>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d942437.4425194685!2d87.7691744803736!3d22.676288075963612!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f882db4908f667%3A0x43e330e68f6c2cbc!2sKolkata%2C%20West%20Bengal!5e0!3m2!1sen!2sin!4v1594929613204!5m2!1sen!2sin" width="100%" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+</section>
 <!-- this is the about us section  -->
 <div class="container-fluid div-content" id="about">
   <h1>About Us</h1>
