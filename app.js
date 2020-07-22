@@ -4,6 +4,7 @@ const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const otpGenerator = require('otp-generator');
+const nodemailer = require('nodemailer');
 
 // setting up the app constant which will make use of express module 
 const app = express();
@@ -26,6 +27,15 @@ const connection = mysql.createConnection({
   user     : process.env.DB_USER,
   password : process.env.DB_PASSWORD,
   database : process.env.DB_NAME
+});
+
+//setting up the email service
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user:process.env.EMAIL,
+    pass:process.env.PASSWORD
+  }
 });
 
 connection.connect(function(err) {
@@ -150,6 +160,16 @@ res.redirect('/forgotpasswordpg1');
 
 app.get('/forgotpasswordpg2', (req,res) => {
 console.log(passwordOTP);
+let mailOptions = {
+  from: process.env.EMAIL,
+  to: editUser,
+  subject: 'Reset password',
+  text:'Enter the given OTP:' + passwordOTP
+};
+transporter.sendMail(mailOptions,function(err){
+  if(!err)  console.log("Email successfully sent!");
+  else  console.log(err);
+});
 res.render('forgotpasswordpg2',{errorMsg:passwordResetMsg});
 });
 
