@@ -1,0 +1,12 @@
+<%- include("partials/header") %>
+<div class="container d-flex align-items-center justify-content-center"  style="height: 98vh;">
+    <form action="/edituserphone" method="POST">
+        <div class="form-group">
+          <label>Enter new phone number</label>
+          <input type="password" name="editphn" class="form-control" id="editphn" required>
+          <small id="error-edit"></small>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+</div>
+<%- include("partials/footer") %>

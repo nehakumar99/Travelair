@@ -1,0 +1,85 @@
+<%- include("partials/header") %>
+<div class="container-fluid text-center container-custom" style="padding-top: 100px;">
+    <h1 class="text-white bottom-line">Book Ticket <i class="fas fa-ticket-alt"></i> </h1>
+    <small class="text-white">Please be carefull while filling your details.</small>
+    <form action="/bookingpage1" method="POST" class="text-white bg-dark booking-form" style="padding: 10px;">
+        <div class="row form-row">
+            <div class="col-2 col-custom">
+                <label>From</label>           
+            </div>
+            <div class="col-4 col-custom">
+                <select class="form-control" name="from">
+                    <% locations.forEach(location => { %>
+                        <option> <%= location.LOCATION %>  </option>
+                    <% }) %>
+                  </select> 
+            </div>
+            <div class="col-1 col-custom">
+             <label>To</label>
+            </div>
+            <div class="col-4 col-custom">
+                <select class="form-control" name="to">
+                    <% locations.forEach(location => { %>
+                        <option> <%= location.LOCATION %>  </option>
+                    <% }) %>
+                  </select> 
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-sm-1 col-md-1 col-custom">
+             <label>Date</label>
+            </div>
+            <div class=" col-sm-4 col-md-3 col-custom">
+                <input class="form-control" type="date" name="boardingdate" required>
+            </div>
+            <div class="col-sm-1 col-md-1 col-custom">
+                <label>Class</label>
+            </div>
+            <div class="col-sm-4 col-md-2 col-custom">
+                <select class="form-control" name="seat">
+                    <option>First</option>
+                    <option>Economy</option>
+                    <option>Business</option>
+                  </select> 
+            </div>
+            <div class="col-sm-6 col-md-2 col-custom">
+                <label>Passenger</label>
+            </div>
+            <div class="col-sm-2 col-md-1 col-custom">
+                <input type="number" class="form-control" name="noofpass" required max="10" min="1">
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
+         <button class="btn-outline-primary btn" type="submit">Search <i class="fa fa-plane-departure"></i></button>
+        </div>
+    </form>
+</div>
+<!-- show this as flight search options  -->
+<div class="container div-content justify-items-center">
+    <small style="color: red;">Showing results</small> <br>
+    <% if (flights.length==0) { %>
+        <small style="color: red;">No flights available for this location</small>
+    <% } %>
+    <div class="row">
+<% flights.forEach(flight => { %>
+    <form action="/bookingpag2" method="post">
+        <div class="col-12 col-md-4">
+            <div class="card text-white mb-3 shadow" style="height: 13rem;">
+                <div class="card-header bg-dark"><i class="fa fa-plane-departure"></i> <%=  flight.FLIGHT_ID %> </div>
+                <div class="card-body">
+                    <div class="media">
+                        <img src="/images/flight.png">
+                        <div class="media-body justify-content-center">
+                          <p class="grey-text">Time: <%= flight.BOARDING_TIME %> </p>
+                          <p class="grey-text">&#8377: <%= flight.SEAT_PRICE %> </p>
+                          <button class="btn btn-outline-primary" type="submit">Select</button>
+                        </div>
+                      </div>
+                </div>
+              </div>     
+        </div>
+    </form>
+<% }) %>
+    </div>
+</div>
+<%- include("partials/footer") %>

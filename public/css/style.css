@@ -1,6 +1,7 @@
 body{
     margin: 0;
     padding: 0;
+    background-color: #E9ECEF;
 }
 h2{
     margin: 0;
@@ -133,6 +134,13 @@ color: #42A5F5;
     width: 100%;
     margin: 0;
 }
+.card-location
+{
+    width: 40vw;
+    height: 15rem;
+    background-size: cover;
+    margin-top: 20px;
+}
 /* styling the timer section  */
 .timer-box{
     background-color:#000;
@@ -188,9 +196,42 @@ color: #42A5F5;
 
 /* profile page  */
 #profile-page{
-    padding: 100px 0;
+    padding: 100px 0 0 0;
+    position: relative;
+    bottom: 50px;
+}
+#profile-inner{
+    color: #fff;
 }
 .profile-heading{
     width: max-content;
     margin: 0 auto;
+}
+
+/* booking page 1 styles  */
+.form-row{
+    padding: 5px 0;
+}
+.bottom-line{
+    padding-top: 4px;
+    border-bottom: 2px solid #fff;
+    max-width: max-content;
+    margin: 0 auto;
+}
+.booking-form{
+    /* background-color: #E9ECEF; */
+    border-radius: 6px;
+}
+.media img{
+    width: 100px;
+    height: 100px;
+}
+.grey-text{
+    color: grey;
+}
+/* responsive styling  */
+@media screen and (max-width: 768px) {
+.card-location{
+width: 80vw;
+}
 }

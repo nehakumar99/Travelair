@@ -1,30 +1,98 @@
 <%- include("partials/header") %>
 <div class="container-fluid" id="profile-page">
-    <div class="container-custom" id="profile-inner">
+    <div class="container-custom justify-content-center" id="profile-inner">
         <div class="row">
-            <div class="col-4 offset-2">
+            <div class="col-5 offset-1">
+              <h3 id="location"></h2>
+              <h5 id="temp"> <span id="unit"> &#176C </span> </h5>
+            </div>
+            <div class="col-5 offset-1">
+               <h5 id="humidity"></h5>
+               <h5 id="desc"></h5>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6 offset-2">
                 <% userInfo.forEach(info => { %>
-                    <h2><%= info.FIRST_NAME %> <%= info.LAST_NAME %> </h2>
-                    <h6><%= info.EMAIL_ID %> </h6>
-                    <h6> <%= info.PHONE_NO %> </h6>
-                    <h6><%= info.BIRTHDAY %> </h6>
+                    <h2><i class="fas fa-user-circle"></i> <%= info.FIRST_NAME %> <%= info.LAST_NAME %> </h2>
+                    <h6><i class="far fa-envelope"></i> <%= info.EMAIL_ID %> </h6>
+                    <h6><i class="fas fa-phone-alt"></i> <%= info.PHONE_NO %> </h6>
+                    <h6><i class="fas fa-birthday-cake"></i> <%= info.BIRTHDAY %> </h6>
                 <% }) %>
             </div>
-            <div class="col-4 offset-2">
-             <img src="images/fakeme.jpg">
+            <div class="col-4">
+             <img src="images/fakeme.jpg" style="height: 100px;border-radius: 50%;width: 100px;">
             </div>
         </div>
     </div>
 </div>
+
 <div class="container">
     <h2 class="mt-0 profile-heading">Edit Profile Details</h2>
-    <div class="row">
-        <div class="col-5 offset-1">
-            <h2> an image with a good desc</h2>
-        </div>
-        <div class="col-5 offset-1">
-            <h1>table of details with edit logo</h1>
-        </div>
-    </div>
+    <table class="table table-hover">
+        <% userInfo.forEach(info => { %>
+        <thead>
+          <tr>
+            <th scope="col">Edit</th>
+            <th scope="col">Detail Name</th>
+            <th scope="col">Detail Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row"><a href="/edituseremail"><i class="fas fa-user-edit user-edit-icon"></i></a></th>
+            <td>Email</td>
+            <td><%= info.EMAIL_ID %></td>
+          </tr>
+          <tr>
+            <th scope="row"><a href="/edituserphone"><i class="fas fa-user-edit user-edit-icon"></i></a></th>
+            <td>Phone Number</td>
+            <td><%= info.PHONE_NO %></td>
+          </tr>
+        </tbody>
+        <% }) %>
+      </table>
 </div>
+<div class="container" id="booking-list">
+  <h2 class="profile-heading">Your Travel History</h2>
+  <small style="color: red;">To cancel any booking <a href="/cancelbooking"><button class="btn-sm btn-outline-danger">Click Here</button></a></small>
+  <table class="table table-sm table-bordered table-hover">
+    <thead>
+      <tr>
+        <th scope="col">BookingID</th>
+        <th scope="col">Tickets</th>
+        <th scope="col">Date</th>
+        <th scope="col">Amount</th>
+        <th>From</th>
+        <th>To</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="jumbotron">
+  <h1 class="display-4">You have no bookings with us!<i class="far fa-sad-tear"></i></h1>
+  <p class="lead">It looks like you did not make any bookings from our website.</p>
+  <hr class="my-4">
+  <p>Click the button below to go the bookings.</p>
+  <a class="btn btn-primary btn-lg" href="/bookingpage1" role="button">Book Now</a>
+</div>
+<!-- create a bookings showing section  -->
+<!-- created a weather api section-->
+<script src="/js/weather.js"></script>
 <%- include("partials/footer") %>

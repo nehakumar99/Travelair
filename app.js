@@ -21,6 +21,8 @@ let editUser;
 let userInfo =[];
 let passwordOTP;
 let passwordResetMsg;
+let flightShow = [];
+let flightSelected = [];
 //setting up database connection
 const connection = mysql.createConnection({
   host     : process.env.DB_HOST,
@@ -198,5 +200,64 @@ app.get('/resetsuccess', (req,res) => {
 res.render('resetsuccess');
 });
 
+//route handling editing user phone number
+app.get('/edituserphone',(req,res) => {
+res.render('editphone');
+});
+
+app.post('/edituserphone',(req,res) => {
+connection.query('UPDATE login_data SET PHONE_NO = ? WHERE EMAIL_ID = ?',[req.body.editphn,user],(error,results) => {
+if(!error) { res.redirect('/profile'); }
+});
+});
+
+// route handling the booking page1
+app.get('/bookingpage1',(req,res) => {
+res.render('bookingpage1',{locations:locationRecommendations,flights:flightShow});
+flightShow=[];
+});
+app.post('/bookingpage1',(req,res) => {
+const toLoc = req.body.to;
+const fromLoc = req.body.from;
+const boardingDate = req.body.boardingdate;
+const passengers = req.body.noofpass;
+const seatClass = String(req.body.seat);
+let sql="";
+// setting query string as per user options 
+if(seatClass == 'First')
+{
+  sql=`SELECT DISTINCTROW(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ))) AS "FLIGHT_ID",(SELECT schedule_data.BOARDING_DATE FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ))) AS "BOARDING_DATE",(SELECT schedule_data.BOARDING_TIME FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ?) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ?))) AS "BOARDING_TIME",(SELECT fare_data.F_SEAT_PRICE FROM fare_data WHERE fare_data.FLIGHT_ID IN (SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? )))) AS "SEAT_PRICE" FROM airport_data,schedule_data,fare_data,flight_data WHERE flight_data.F_SEAT_AVL>= ? AND schedule_data.BOARDING_DATE = ? `;
+}
+else if (seatClass == 'Economy')
+{
+  sql=`SELECT DISTINCTROW(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ))) AS "FLIGHT_ID",(SELECT schedule_data.BOARDING_DATE FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ))) AS "BOARDING_DATE",(SELECT schedule_data.BOARDING_TIME FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ?) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ?))) AS "BOARDING_TIME",(SELECT fare_data.E_SEAT_PRICE FROM fare_data WHERE fare_data.FLIGHT_ID IN (SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? )))) AS "SEAT_PRICE" FROM airport_data,schedule_data,fare_data,flight_data WHERE flight_data.E_SEAT_AVL>= ? AND schedule_data.BOARDING_DATE = ? `; 
+}
+else
+{
+  sql=`SELECT DISTINCTROW(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ))) AS "FLIGHT_ID",(SELECT schedule_data.BOARDING_DATE FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ))) AS "BOARDING_DATE",(SELECT schedule_data.BOARDING_TIME FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ?) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ?))) AS "BOARDING_TIME",(SELECT fare_data.B_SEAT_PRICE FROM fare_data WHERE fare_data.FLIGHT_ID IN (SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID IN(SELECT schedule_data.FLIGHT_ID FROM schedule_data WHERE schedule_data.FROM_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? ) AND schedule_data.TO_AIRPORT_ID IN(SELECT airport_data.AIRPORT_ID FROM airport_data WHERE airport_data.LOCATION = ? )))) AS "SEAT_PRICE" FROM airport_data,schedule_data,fare_data,flight_data WHERE flight_data.B_SEAT_AVL>= ? AND schedule_data.BOARDING_DATE = ? `; 
+}
+connection.query(sql,[fromLoc,toLoc,fromLoc,toLoc,fromLoc,toLoc,fromLoc,toLoc,passengers,boardingDate],function(error,results)
+{
+if(!error)
+{    
+      results.forEach(result => {
+        flightShow.push(result);
+      });
+  res.redirect('/bookingpage1');
+ }
+});
+});
+// route hndling booking page 2 
+app.post('/booking-2', function(req,res){
+  flightSelected = (String(req.body.flight)).trim();
+  let price;
+  for (const i in flights) {
+    if (flights[i].FLIGHT_ID == flightSelected)
+     price = flights[i].SEAT_PRICE;
+    }
+  totalPrice = Number(numberOfpassengers)*price;
+  res.redirect('/booking-2');
+ });
+ 
 //app listening on port 4000
 app.listen(4000, () => console.log('App listening on port 4000!'));
