@@ -5,6 +5,7 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
+const uniqid = require('uniqid');
 
 // setting up the app constant which will make use of express module 
 const app = express();
@@ -22,10 +23,9 @@ let userInfo =[];
 let passwordOTP;
 let passwordResetMsg;
 let flightShow = [];
-let flightSelected = [];
+let selected;
 let passengers;
 let totalPrice;
-let flightChosen=[];
 let passengersData=[];
 //setting up database connection
 const connection = mysql.createConnection({
@@ -252,7 +252,7 @@ if(!error)
 });
 // route hndling booking page 2 
 app.post('/bookingpage2', function(req,res){
-  const selected = (String(req.body.flight)).trim();
+ selected = (String(req.body.flight)).trim();
   let price;
   for (const i in flightShow) {
     if (flightShow[i].FLIGHT_ID == selected)
@@ -280,6 +280,10 @@ res.redirect('/confirmation');
 });
 app.get('/confirmation', (req,res) => {
 res.render('confirmation',{passengers:passengers,totalPrice:totalPrice});
+});
+// route handling payments portal page 
+app.get('/paymentsportal',(req,res) => {
+res.redirect('/successfulbooking')
 });
 //app listening on port 4000
 app.listen(4000, () => console.log('App listening on port 4000!'));
