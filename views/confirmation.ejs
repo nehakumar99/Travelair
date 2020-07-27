@@ -1,0 +1,18 @@
+<%- include("partials/header") %>
+<div class="container ">
+    <div class="bill-content div-content" style="padding-top:100px;">
+        <h1>Confirm Booking</h1>
+        <div class="card mt-10 bill-card" style="width: 20rem;">
+            <div class="card-header bg-primary text-white">Confirm and Pay</div>
+            <img src="images/bill-img.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Payment Details</h5>
+              <p class="card-text">Please check your details given correctly!</p>
+               <p class="tag"><i class="fas fa-user icon-custom"></i> Passengers: <span> <%= passengers %> </span></p>
+               <p class="tag"><i class="fas fa-tag icon-custom"></i> Total Cost: <span><i class="fas fa-rupee-sign"></i> <%= totalPrice %>  </span></p>
+               <a href="/paymentsportal" class="btn btn-lg btn-primary">Pay Now</a>
+            </div>
+           </div>
+        </div>
+    </div>
+<%- include("partials/footer") %>

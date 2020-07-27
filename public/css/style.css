@@ -1,7 +1,6 @@
 body{
     margin: 0;
     padding: 0;
-    /* background-color: #E9ECEF; */
     background-color: #e9ecef;
     background-image: url("https://www.transparenttextures.com/patterns/diamond-upholstery.png");
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
@@ -239,6 +238,13 @@ color: #42A5F5;
     border-radius: 4px;
     padding: 5px;
     font-weight: bold;
+}
+/* styling confirmation page  */
+.icon-custom{
+    color: dodgerblue;
+}
+.bill-card{
+    margin: 30px auto;
 }
 /* responsive styling  */
 @media screen and (max-width: 768px) {

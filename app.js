@@ -26,6 +26,7 @@ let flightSelected = [];
 let passengers;
 let totalPrice;
 let flightChosen=[];
+let passengersData=[];
 //setting up database connection
 const connection = mysql.createConnection({
   host     : process.env.DB_HOST,
@@ -267,11 +268,18 @@ app.post('/bookingpage2', function(req,res){
  res.render('bookingpage2',{passengers:passengers});
  });
   //  ROUTE HANDLING CONFIRMATIONPAGE 
-app.get('/cconfirmation', (req,res) => {
-
+app.post('/confirmation', (req,res) => {
+const passenger = {
+  firstName: req.body.fname,
+  lastName:req.body.lname,
+  age:req.body.age,
+  gender:req.body.gender
+};
+passengersData.push(passenger);
+res.redirect('/confirmation');
 });
 app.get('/confirmation', (req,res) => {
-
+res.render('confirmation',{passengers:passengers,totalPrice:totalPrice});
 });
 //app listening on port 4000
 app.listen(4000, () => console.log('App listening on port 4000!'));

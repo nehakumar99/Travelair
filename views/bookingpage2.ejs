@@ -9,15 +9,15 @@
                      <label class="passenger-info">Passenger <%= index %> </label>
                     </div>
                   <div class="col-12 col-md-6 col-custom">
-                    <input type="text" class="form-control" placeholder="First name" required>
+                    <input type="text" class="form-control" name="fname" placeholder="First name" required>
                   </div>
                   <div class="col-12 col-md-6 col-custom">
-                    <input type="text" class="form-control" placeholder="Last name" required>
+                    <input type="text" class="form-control" name="lname" placeholder="Last name" required>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-6 col-custom">
-                    <select class="form-control" name="Gender">
+                    <select class="form-control" name="gender">
                             <option value="M">Male</option>
                             <option value="F">Female</option>
                             <option value="T">Transgender</option>
@@ -25,7 +25,7 @@
                       </select> 
                   </div>
                   <div class="col-6 col-custom">
-                    <input type="text" class="form-control" placeholder="Age" required pattern="[0-9]{2}" title="Enter 2 digit numeric value like 05, 76">
+                    <input type="text" name="age" class="form-control" placeholder="Age" required pattern="[0-9]{2}" title="Enter 2 digit numeric value like 05, 76">
                   </div>
                 </div>            
             <% } %>
