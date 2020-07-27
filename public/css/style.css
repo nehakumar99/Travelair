@@ -1,7 +1,10 @@
 body{
     margin: 0;
     padding: 0;
-    background-color: #E9ECEF;
+    /* background-color: #E9ECEF; */
+    background-color: #e9ecef;
+    background-image: url("https://www.transparenttextures.com/patterns/diamond-upholstery.png");
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 h2{
     margin: 0;
@@ -228,6 +231,14 @@ color: #42A5F5;
 }
 .grey-text{
     color: grey;
+}
+/* styling booking page 2 */
+.passenger-info{
+    background-color: #fff;
+    border-bottom: 1px solid #000;
+    border-radius: 4px;
+    padding: 5px;
+    font-weight: bold;
 }
 /* responsive styling  */
 @media screen and (max-width: 768px) {

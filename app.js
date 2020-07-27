@@ -23,6 +23,9 @@ let passwordOTP;
 let passwordResetMsg;
 let flightShow = [];
 let flightSelected = [];
+let passengers;
+let totalPrice;
+let flightChosen=[];
 //setting up database connection
 const connection = mysql.createConnection({
   host     : process.env.DB_HOST,
@@ -214,13 +217,12 @@ if(!error) { res.redirect('/profile'); }
 // route handling the booking page1
 app.get('/bookingpage1',(req,res) => {
 res.render('bookingpage1',{locations:locationRecommendations,flights:flightShow});
-flightShow=[];
 });
 app.post('/bookingpage1',(req,res) => {
 const toLoc = req.body.to;
 const fromLoc = req.body.from;
 const boardingDate = req.body.boardingdate;
-const passengers = req.body.noofpass;
+passengers = req.body.noofpass;
 const seatClass = String(req.body.seat);
 let sql="";
 // setting query string as per user options 
@@ -248,16 +250,28 @@ if(!error)
 });
 });
 // route hndling booking page 2 
-app.post('/booking-2', function(req,res){
-  flightSelected = (String(req.body.flight)).trim();
+app.post('/bookingpage2', function(req,res){
+  const selected = (String(req.body.flight)).trim();
   let price;
-  for (const i in flights) {
-    if (flights[i].FLIGHT_ID == flightSelected)
-     price = flights[i].SEAT_PRICE;
+  for (const i in flightShow) {
+    if (flightShow[i].FLIGHT_ID == selected)
+     price = flightShow[i].SEAT_PRICE;
+     const choice = {
+       FLIGHT_ID:flightShow[i].FLIGHT_ID,
+     }
     }
-  totalPrice = Number(numberOfpassengers)*price;
-  res.redirect('/booking-2');
+  totalPrice = Number(passengers)*price;
+  res.redirect('/bookingpage2');
  });
- 
+ app.get('/bookingpage2',(req,res) => {
+ res.render('bookingpage2',{passengers:passengers});
+ });
+  //  ROUTE HANDLING CONFIRMATIONPAGE 
+app.get('/cconfirmation', (req,res) => {
+
+});
+app.get('/confirmation', (req,res) => {
+
+});
 //app listening on port 4000
 app.listen(4000, () => console.log('App listening on port 4000!'));

@@ -62,23 +62,23 @@
     <% } %>
     <div class="row">
 <% flights.forEach(flight => { %>
-    <form action="/bookingpag2" method="post">
-        <div class="col-12 col-md-4">
-            <div class="card text-white mb-3 shadow" style="height: 13rem;">
-                <div class="card-header bg-dark"><i class="fa fa-plane-departure"></i> <%=  flight.FLIGHT_ID %> </div>
+        <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
+            <form action="/bookingpage2" method="post">
+            <div class="card text-white mb-3 shadow">
+                <div class="card-header bg-dark form-group"><i class="fa fa-plane-departure"></i> <%=  flight.FLIGHT_ID %> </div>
                 <div class="card-body">
                     <div class="media">
                         <img src="/images/flight.png">
                         <div class="media-body justify-content-center">
                           <p class="grey-text">Time: <%= flight.BOARDING_TIME %> </p>
                           <p class="grey-text">&#8377: <%= flight.SEAT_PRICE %> </p>
-                          <button class="btn btn-outline-primary" type="submit">Select</button>
+                          <button class="btn btn-outline-primary" name="flight"  value=" <%= flight.FLIGHT_ID %> " type="submit">Select</button>
                         </div>
                       </div>
                 </div>
               </div>     
-        </div>
-    </form>
+            </form>
+        </div> 
 <% }) %>
     </div>
 </div>
