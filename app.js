@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
 const uniqid = require('uniqid');
+const Date = require(__dirname + "/date.js");
 
 // setting up the app constant which will make use of express module 
 const app = express();
@@ -26,7 +27,10 @@ let flightShow = [];
 let selected;
 let passengers;
 let totalPrice;
+let seatClass;
 let passengersData=[];
+let details=[];
+let ticketDetails=[];
 //setting up database connection
 const connection = mysql.createConnection({
   host     : process.env.DB_HOST,
@@ -224,7 +228,7 @@ const toLoc = req.body.to;
 const fromLoc = req.body.from;
 const boardingDate = req.body.boardingdate;
 passengers = req.body.noofpass;
-const seatClass = String(req.body.seat);
+seatClass = String(req.body.seat);
 let sql="";
 // setting query string as per user options 
 if(seatClass == 'First')
@@ -283,7 +287,98 @@ res.render('confirmation',{passengers:passengers,totalPrice:totalPrice});
 });
 // route handling payments portal page 
 app.get('/paymentsportal',(req,res) => {
-res.redirect('/successfulbooking')
+  bookingId = uniqid();
+  let seatUpdate;
+  // let sqlBook = `INSERT INTO booking_data SET ?`
+  let sqlFetch="";
+  let flightUpdate="";
+  if(seatClass == "First")
+  {
+    sqlFetch = `SELECT DISTINCTROW(SELECT flight_data.AIRPORT_ID FROM flight_data WHERE flight_data.FLIGHT_ID=?) AS "AIRPORT_ID",(SELECT flight_data.F_SEAT_AVL FROM flight_data WHERE flight_data.FLIGHT_ID=?) AS "SEATS_AVL",(SELECT airport_data.AIRPORT_NAME FROM airport_data WHERE airport_data.AIRPORT_ID IN (SELECT schedule_data.FROM_AIRPORT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID=?)) AS "FROM_AIRPORT_LOCATION",(SELECT airport_data.AIRPORT_NAME FROM airport_data WHERE airport_data.AIRPORT_ID IN (SELECT schedule_data.TO_AIRPORT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID=?)) AS "TO_AIRPORT_LOCATION" FROM flight_data,airport_data,schedule_data;`
+    flightUpdate = `UPDATE flight_data SET F_SEAT_AVL=? WHERE FLIGHT_ID = ? `;
+  }
+  else if(seatClass == "Economy")
+  {
+    sqlFetch = `SELECT DISTINCTROW(SELECT flight_data.AIRPORT_ID FROM flight_data WHERE flight_data.FLIGHT_ID=?) AS "AIRPORT_ID",(SELECT flight_data.E_SEAT_AVL FROM flight_data WHERE flight_data.FLIGHT_ID=?) AS "SEATS_AVL",(SELECT airport_data.AIRPORT_NAME FROM airport_data WHERE airport_data.AIRPORT_ID IN (SELECT schedule_data.FROM_AIRPORT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID=?)) AS "FROM_AIRPORT_LOCATION",(SELECT airport_data.AIRPORT_NAME FROM airport_data WHERE airport_data.AIRPORT_ID IN (SELECT schedule_data.TO_AIRPORT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID=?)) AS "TO_AIRPORT_LOCATION" FROM flight_data,airport_data,schedule_data;`
+    flightUpdate = `UPDATE flight_data SET E_SEAT_AVL=? WHERE FLIGHT_ID = ? `;
+  }
+  else
+  {
+    sqlFetch = `SELECT DISTINCTROW(SELECT flight_data.AIRPORT_ID FROM flight_data WHERE flight_data.FLIGHT_ID=?) AS "AIRPORT_ID",(SELECT flight_data.B_SEAT_AVL FROM flight_data WHERE flight_data.FLIGHT_ID=?) AS "SEATS_AVL",(SELECT airport_data.AIRPORT_NAME FROM airport_data WHERE airport_data.AIRPORT_ID IN (SELECT schedule_data.FROM_AIRPORT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID=?)) AS "FROM_AIRPORT_LOCATION",(SELECT airport_data.AIRPORT_NAME FROM airport_data WHERE airport_data.AIRPORT_ID IN (SELECT schedule_data.TO_AIRPORT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID=?)) AS "TO_AIRPORT_LOCATION" FROM flight_data,airport_data,schedule_data;`
+    flightUpdate = `UPDATE flight_data SET B_SEAT_AVL=? WHERE FLIGHT_ID = ? `;
+  }
+  
+  connection.query('INSERT INTO booking_data SET ?',{BOOKING_ID:bookingId,EMAIL_ID:user,NO_OF_TICKETS:passengers,FLIGHT_ID:selected,SEAT_CLASS:seatClass,TOTAL_PRICE:totalPrice,BOOKING_DATE:Date()},function(error,results) {
+  if(!error)
+  {
+  console.log("INSERTED INTO BOOKING DATA");
+  }});
+  
+  connection.query(sqlFetch,[selected,selected,selected,selected], function(error,results){
+    if(!error)
+    {  
+      for (const i in results) {
+        details.push({AIRPORT_ID:results[i].AIRPORT_ID,SEATS_AVL:results[i].SEATS_AVL,FROM:results[i].FROM_AIRPORT_LOCATION,TO:results[i].TO_AIRPORT_LOCATION});
+        seatUpdate=Number(results[i].SEATS_AVL)-Number(passengers);
+      }
+      connection.query(flightUpdate,[seatUpdate,selected],(error,results) => {
+        if(!error)
+        {
+          console.log("Flight details Updated");
+         }
+    });
+    }});
+      res.redirect('/confirmsuccesful');
+});
+
+//route handling confirmation succesful page
+app.get('/confirmsuccessful',(req,res) => {
+  let seats;
+  let flightDate;
+  let flightTime;
+  let from;
+  let to;
+  let ticket =`INSERT INTO ticket_data SET ?`;
+  for (const i in details) {
+   seats=details[i].SEATS_AVL;
+   from=details[i].FROM;
+   to=details[i].TO;
+  }
+  for (const i in flightShow) {
+    if (flightShow[i].FLIGHT_ID == selected)
+    flightDate = flightShow[i].BOARDING_DATE;
+    flightTime = flightShow[i].BOARDING_TIME;
+    }
+  for (let i = 0; i<numberOfpassengers; i++) {
+  let ticketEntry = {
+    TICKET_ID:uniqid(seats,seats),
+    BOOKING_ID:bookingId,
+    BOARDING_DATE:flightDate,
+    BOARDING_TIME:flightTime,
+    FLIGHT_ID:selected,
+    FIRST_NAME:passengersData[0].firstName[i],
+    LAST_NAME:passengersData[0].lastName[i],
+    FROM_AIRPORT_NAME:from,
+    TO_AIRPORT_NAME:to,
+    SEAT_NO:String(seats)+String(seatClass).charAt(0),
+    GENDER:passengersData[0].gender[i],
+    AGE:passengersData[0].age[i]
+  }
+  seats=Number(seats)-1;
+  connection.query(ticket,ticketEntry,error => {
+  if(!error)
+  {
+   ticketDetails.push(ticketEntry);
+    }  else {
+   console.log(error);
+    }
+  });
+}
+res.redirect('/thanks');
+});
+// route handling thanks 
+app.get('/thanks',(req,res) => {
+res.render('thanks');
 });
 //app listening on port 4000
 app.listen(4000, () => console.log('App listening on port 4000!'));
