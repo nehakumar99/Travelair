@@ -5,6 +5,8 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
+const pdf = require('html-pdf');
+const path = require('path');
 const uniqid = require('uniqid');
 const Date = require(__dirname + "/date.js");
 
@@ -362,7 +364,6 @@ app.get('/paymentsportal',(req,res) => {
       });
       seats=Number(seats)-1;
     }
-
     }
   });
       res.redirect('/confirmsuccessful');
@@ -376,5 +377,25 @@ res.redirect('/thanks');
 app.get('/thanks',(req,res) => {
 res.render('thanks');
 });
+//route for handling download route
+app.get('/download',function(req,res){
+  res.render(path.join(__dirname,'/views/template.ejs'),{tickets:ticketDetails},(error,data) => {
+  if(error) 
+  {
+    console.log(error);
+  }else {
+    let options = { format:"A4"};
+    pdf.create(data,options).toFile("ticket.pdf",function(error,data){
+      if(error)
+      {
+        console.log(error);
+      }
+      else{
+        res.download(__dirname+'/ticket.pdf');
+      }
+    })
+  }
+  });
+  });
 //app listening on port 4000
 app.listen(4000, () => console.log('App listening on port 4000!'));

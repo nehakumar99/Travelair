@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TICKET</title>
+        <style>
+p{
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+div{
+    padding-left: 5px;
+    padding-bottom: 5px;
+}
+        </style>
+    </head>
+    <body>
+        <% if (tickets.length != 0) { %>
+            <% tickets.forEach(ticket => { %>
+                <div class="ticket-conatiner" style="background-color:#000;width: 80%;margin: 200px auto;color: white;border-radius: 6px;margin-bottom: 100px;">
+                    <div class="head">
+                        <h2 style="text-align: center;">Boarding Pass </h4>
+                        <p>Booking ID <%= ticket.BOOKING_ID %> </p>
+                        <p>Flight <%= ticket.FLIGHT_ID %> </p>
+                    </div>
+                    <div class="col">
+                        <p>Ticket ID <%= ticket.TICKET_ID %> </p>
+                        <p>Name <%= ticket.FIRST_NAME %> <%= ticket.LAST_NAME %>  </p>
+                         <p>Age: <%= ticket.AGE %> </p>
+                         <p>Gender: <%= ticket.GENDER %> </p>
+                    </div>
+                    <div class="col">
+                        <p>From <%= ticket.FROM_AIRPORT_NAME %>  </p>
+                        <p>To <%= ticket.TO_AIRPORT_NAME %>  </p>
+                        <p>Seat Number <%= ticket.SEAT_NO %> </p>
+                        <p>Boarding Date <%= ticket.BOARDING_DATE %> </p>
+                        <p>Boarding Time <%= ticket.BOARDING_TIME %> </p>
+                    </div>
+                </div>    
+            <% })}; %>    
+   </body>
+    </html>
