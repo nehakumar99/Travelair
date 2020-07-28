@@ -1,5 +1,8 @@
- <%- include("partials/header") %>
- 
+ <% if (isAuthenticated ==true) { %>
+  <%- include("partials/authheader") %>
+ <% }else{ %>
+  <%- include("partials/header") %>
+  <% } %>
     <!-- carousel  -->
     <div id="carouselPages" class="carousel slide carousel-fade" data-ride="carousel">
       <div class="carousel-inner">

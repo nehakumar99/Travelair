@@ -17,7 +17,7 @@ h2{
     margin: 0 auto;
     width: max-content;
     color: #424242;
-    border-bottom: 2px solid #42A5F5;
+    border-bottom: 2px solid dodgerblue;
 }
 /* styling the navbar and carousel  */
 .fa-plane-departure{
@@ -36,10 +36,10 @@ nav{
     padding-bottom: 5px;
 }
 .nav-link:hover , .navbar-brand:hover{
-    color: #42A5F5;
+    color: dodgerblue;
 }
 .nav-link:hover{
-border-bottom: 2px solid  #42A5F5;
+border-bottom: 2px solid  dodgerblue;
 }
 .dropdown-menu
 {
@@ -51,7 +51,7 @@ border-bottom: 2px solid  #42A5F5;
 }
 .dropdown-item:hover
 {
-color: #42A5F5;
+color: dodgerblue;
 }
 .carousel-item img{
     filter: grayscale(60%);
@@ -101,10 +101,10 @@ color: #42A5F5;
 .col-custom img{
     width: 350px;
     height: 250px;
-    border: 5px solid #42A5F5;
+    border: 5px solid dodgerblue;
 }
 .col-custom h2 ,.profile-heading{
-    color: #42A5F5;
+    color: dodgerblue;
     padding-bottom: 10px;
     border-bottom: 2px solid #424442;
 }
@@ -113,7 +113,7 @@ color: #42A5F5;
     margin-bottom: 10px;
 }
 .col-caption h3{
-    border-bottom:2px solid #42A5F5;
+    border-bottom:2px solid dodgerblue;
 }
 /* styling the locations recommendations  */
 #recommendation ,  .container-custom{
@@ -156,12 +156,12 @@ color: #42A5F5;
 .timer-foot{
     color: #000;
     background-color: white;
-    color: #42A5F5;
+    color: dodgerblue;
 }
 /* styling out footer section  */
 #footer{
     background-color: #424442;
-    color: #42A5F5;
+    color: dodgerblue;
     padding-bottom: 10px;
 }
 #footer h2{
@@ -169,7 +169,7 @@ color: #42A5F5;
     width: max-content;
     padding: 10px 3px 0;
     margin-bottom: 20px;
-    border-bottom: 2px solid #42A5F5;
+    border-bottom: 2px solid dodgerblue;
     margin: 20px auto;
 }
 .footer-icon{

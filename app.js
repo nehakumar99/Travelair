@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
 const pdf = require('html-pdf');
@@ -33,14 +35,38 @@ let seatClass;
 let passengersData=[];
 let details=[];
 let ticketDetails=[];
+let bookingList =[];
+let isAuthenticated = false;
 //setting up database connection
-const connection = mysql.createConnection({
+const options = {
   host     : process.env.DB_HOST,
   user     : process.env.DB_USER,
-  password : process.env.DB_PASSWORD,
-  database : process.env.DB_NAME
-});
-
+  password : '',
+  database : process.env.DB_NAME,
+};
+var connection = mysql.createConnection(options);
+//creating session storage options and connection to our mySQL database
+var sessionStore = new MySQLStore({
+  expiration: 10800000,
+  createDatabaseTable: true,
+  endConnectionOnClose: true,
+  schema: {
+      tableName: 'USERS_SESSIONS',
+      columnNames: {
+          session_id: 'session_id',
+          expires: 'expires',
+          data: 'data'
+      }
+  }
+},connection);
+//telling the app to use  session
+app.use(session({
+key: process.env.KEY,
+secret: process.env.SECRET,
+store: sessionStore,
+resave: false,
+saveUninitialized: false
+}));
 //setting up the email service
 let transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -71,7 +97,7 @@ app.get('/', (req, res) => {
     res.redirect('/'); 
   });
 }else{
- res.render('home',{recommendations:locationRecommendations});
+ res.render('home',{recommendations:locationRecommendations,isAuthenticated:isAuthenticated});
   }
 });
 
@@ -91,6 +117,7 @@ connection.query(findUser,(error,results) => {
        res.redirect('/');
      }else{
        user = String(mail);
+       isAuthenticated=true;
        res.redirect('/profile');
      }
     }
@@ -121,6 +148,7 @@ app.post('/signup',(req,res) => {
           let saveInfo = 'INSERT INTO login_data SET ?';
           connection.query(saveInfo,{EMAIL_ID:mail,PASSWORD:password},(error,results)=>{
             user = String(mail);
+            isAuthenticated=true;
             res.redirect('/profile');
           })
         }
@@ -136,16 +164,27 @@ app.post('/signup',(req,res) => {
 //handling route for profile
 app.get('/profile',(req,res) => {
  let profileQuery = 'SELECT *FROM customer_data WHERE EMAIL_ID = '+ mysql.escape(user);
- if(userInfo.length == 0){
-  connection.query(profileQuery,(error,results) => {
+ let showBooks = 'SELECT *FROM booking_data WHERE EMAIL_ID = '+ mysql.escape(user);
+
+ if(bookingList.length ==0){
+  connection.query(showBooks,(error,results) => {
     if(!error){
     results.forEach(result => {
-     userInfo.push(result);
+     bookingList.push(result);
     });
-  } res.redirect('/profile');
- })
+    if(userInfo.length == 0){
+      connection.query(profileQuery,(error,results) => {
+        if(!error){
+        results.forEach(result => {
+         userInfo.push(result);
+        });
+      } res.redirect('/profile');
+     })
+     }
+  } 
+ });
  }else{
-  res.render('profile',{userInfo:userInfo});
+  res.render('profile',{userInfo:userInfo,bookings:bookingList,isAuthenticated:isAuthenticated});
  }
 });
 // route handling pages of forgot password
@@ -211,7 +250,7 @@ res.render('resetsuccess');
 
 //route handling editing user phone number
 app.get('/edituserphone',(req,res) => {
-res.render('editphone');
+res.render('editphone',{isAuthenticated:isAuthenticated});
 });
 
 app.post('/edituserphone',(req,res) => {
@@ -222,7 +261,7 @@ if(!error) { res.redirect('/profile'); }
 
 // route handling the booking page1
 app.get('/bookingpage1',(req,res) => {
-res.render('bookingpage1',{locations:locationRecommendations,flights:flightShow});
+res.render('bookingpage1',{locations:locationRecommendations,flights:flightShow,isAuthenticated:isAuthenticated});
 });
 app.post('/bookingpage1',(req,res) => {
 const toLoc = req.body.to;
@@ -270,7 +309,7 @@ app.post('/bookingpage2', function(req,res){
   res.redirect('/bookingpage2');
  });
  app.get('/bookingpage2',(req,res) => {
- res.render('bookingpage2',{passengers:passengers});
+ res.render('bookingpage2',{passengers:passengers,isAuthenticated:isAuthenticated});
  });
   //  ROUTE HANDLING CONFIRMATIONPAGE 
 app.post('/confirmation', (req,res) => {
@@ -284,7 +323,7 @@ passengersData.push(passenger);
 res.redirect('/confirmation');
 });
 app.get('/confirmation', (req,res) => {
-res.render('confirmation',{passengers:passengers,totalPrice:totalPrice});
+res.render('confirmation',{passengers:passengers,totalPrice:totalPrice,isAuthenticated:isAuthenticated});
 });
 // route handling payments portal page 
 app.get('/paymentsportal',(req,res) => {
@@ -375,7 +414,7 @@ res.redirect('/thanks');
 });
 // route handling thanks 
 app.get('/thanks',(req,res) => {
-res.render('thanks');
+res.render('thanks',{isAuthenticated:isAuthenticated});
 });
 //route for handling download route
 app.get('/download',function(req,res){
@@ -396,6 +435,18 @@ app.get('/download',function(req,res){
     })
   }
   });
+  });
+  // handling logout route 
+  app.get('/logout',(req,res) => {
+  isAuthenticated=false;
+  bookingList=[];
+  user="";
+  userExists = false;
+  flightShow =[];
+  details=[];
+  passengersData=[];
+  ticketDetails=[];
+ res.redirect('/');
   });
 //app listening on port 4000
 app.listen(4000, () => console.log('App listening on port 4000!'));

@@ -1,4 +1,5 @@
-<%- include("partials/header") %>
+
+<%- include("partials/authheader") %>
 <div class="container-fluid" id="profile-page">
     <div class="container-custom justify-content-center" id="profile-inner">
         <div class="row">
@@ -55,43 +56,42 @@
       </table>
 </div>
 <div class="container" id="booking-list">
-  <h2 class="profile-heading">Your Travel History</h2>
+  <h2 class="profile-heading">Your Booking History</h2>
+  <% if (bookings.length == 0) { %>
+    <div class="jumbotron">
+      <h1 class="display-4">You have no bookings with us!<i class="far fa-sad-tear"></i></h1>
+      <p class="lead">It looks like you did not make any bookings from our website.</p>
+      <hr class="my-4">
+      <p>Click the button below to go the bookings.</p>
+      <a class="btn btn-primary btn-lg" href="/bookingpage1" role="button">Book Now</a>
+    </div>
+  <% }else{ %>
   <small style="color: red;">To cancel any booking <a href="/cancelbooking"><button class="btn-sm btn-outline-danger">Click Here</button></a></small>
-  <table class="table table-sm table-bordered table-hover">
+  <table class="table table-sm table-bordered table-hover" >
     <thead>
       <tr>
         <th scope="col">BookingID</th>
         <th scope="col">Tickets</th>
         <th scope="col">Date</th>
         <th scope="col">Amount</th>
-        <th>From</th>
-        <th>To</th>
         <th scope="col">Status</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
+      <% bookings.forEach(booking => { %>
+        <tr>
+          <th scope="row"><%= booking.BOOKING_ID %> </th>
+          <td><%= booking.NO_OF_TICKETS %> </td>
+          <td><%= booking.BOOKING_DATE %> </td>
+          <td><%= booking.TOTAL_PRICE %> </td>
+          <td><%= booking.STATUS %> </td>
+        </tr>
+      <% }); %>
     </tbody>
   </table>
+  <% } %>
 </div>
-<div class="jumbotron">
-  <h1 class="display-4">You have no bookings with us!<i class="far fa-sad-tear"></i></h1>
-  <p class="lead">It looks like you did not make any bookings from our website.</p>
-  <hr class="my-4">
-  <p>Click the button below to go the bookings.</p>
-  <a class="btn btn-primary btn-lg" href="/bookingpage1" role="button">Book Now</a>
-</div>
+
 <!-- create a bookings showing section  -->
 <!-- created a weather api section-->
 <script src="/js/weather.js"></script>
