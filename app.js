@@ -330,60 +330,46 @@ app.get('/paymentsportal',(req,res) => {
         from=result.FROM_AIRPORT_LOCATION;
         to=result.TO_AIRPORT_LOCATION;
         seats=result.SEATS_AVL;
+        seatUpdate=Number(result.SEATS_AVL)-Number(passengers);
       }); 
-      seatUpdate=Number(results[i].SEATS_AVL)-Number(passengers);
       connection.query(flightUpdate,[seatUpdate,selected],(error,results) => {
         if(!error)
         {
           console.log("Flight details Updated");
          }
     });
-    //ticket update query
+    for (let i = 0; i<passengers; i++) {
+      let ticketEntry = {
+        TICKET_ID:uniqid(seats,seats),
+        BOOKING_ID:bookingId,
+        BOARDING_DATE:flightDate,
+        BOARDING_TIME:flightTime,
+        FLIGHT_ID:selected,
+        FIRST_NAME:passengersData[0].firstName[i],
+        LAST_NAME:passengersData[0].lastName[i],
+        FROM_AIRPORT_NAME:from,
+        TO_AIRPORT_NAME:to,
+        SEAT_NO:String(seats)+String(seatClass).charAt(0),
+        GENDER:passengersData[0].gender[i],
+        AGE:passengersData[0].age[i]
+      }
+      connection.query('INSERT INTO ticket_data SET ?',ticketEntry,error => {
+        if(!error){
+          ticketDetails.push(ticketEntry);
+           }  else {
+          console.log(error);
+           }
+      });
+      seats=Number(seats)-1;
+    }
 
-    }});
+    }
+  });
       res.redirect('/confirmsuccessful');
 });
 
 //route handling confirmation succesful page
 app.get('/confirmsuccessful',(req,res) => {
-
-  let ticket =`INSERT INTO ticket_data SET ?`;
-  for (const i in details) {
-   seats=details[i].SEATS_AVL;
-   from=details[i].FROM;
-   to=details[i].TO;
-  }
-
-  for (const i in flightShow) {
-    if (flightShow[i].FLIGHT_ID == selected)
-    flightDate = flightShow[i].BOARDING_DATE;
-    flightTime = flightShow[i].BOARDING_TIME;
-    }
-  for (let i = 0; i<passengers; i++) {
-  let ticketEntry = {
-    TICKET_ID:uniqid(seats,seats),
-    BOOKING_ID:bookingId,
-    BOARDING_DATE:flightDate,
-    BOARDING_TIME:flightTime,
-    FLIGHT_ID:selected,
-    FIRST_NAME:passengersData[0].firstName[i],
-    LAST_NAME:passengersData[0].lastName[i],
-    FROM_AIRPORT_NAME:from,
-    TO_AIRPORT_NAME:to,
-    SEAT_NO:String(seats)+String(seatClass).charAt(0),
-    GENDER:passengersData[0].gender[i],
-    AGE:passengersData[0].age[i]
-  }
-  seats=Number(seats)-1;
-  connection.query(ticket,ticketEntry,error => {
-  if(!error)
-  {
-   ticketDetails.push(ticketEntry);
-    }  else {
-   console.log(error);
-    }
-  });
-}
 res.redirect('/thanks');
 });
 // route handling thanks 
