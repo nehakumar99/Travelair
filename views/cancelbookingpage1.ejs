@@ -1,0 +1,42 @@
+<%- include("partials/authheader") %>
+<div class="container text-white" style="padding-top:100px;">
+    <div class="container-custom">
+        <small>Enter the details of the booking which you want to cancel</small>
+        <form action="/cancelbooking" method="post">
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <label>Booking ID</label>
+                </div>
+                <div class="col-12 col-md-5">
+                    <input type="text" class="form-control" name="bookingid">
+                </div>
+            </div>  
+            <!-- Button trigger modal -->
+<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
+    Cancel Booking
+   </button>
+   
+   <!-- Modal -->
+   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+       <div class="modal-content">
+         <div class="modal-header bg-dark text-black">
+           <h5 class="modal-title">Are you sure you want to cancel?</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+           </button>
+         </div>
+         <div class="modal-body">
+           <button class="btn btn-outline-dark" type="submit">Yes!</button>
+         </div>
+       </div>
+     </div>
+   </div>
+   
+        </form>
+
+    </div>
+</div>
+
+
+<%- include("partials/footer") %>

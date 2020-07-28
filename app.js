@@ -10,6 +10,8 @@ const nodemailer = require('nodemailer');
 const pdf = require('html-pdf');
 const path = require('path');
 const uniqid = require('uniqid');
+const { CANCELLED } = require('dns');
+const { log } = require('console');
 const Date = require(__dirname + "/date.js");
 
 // setting up the app constant which will make use of express module 
@@ -37,6 +39,7 @@ let details=[];
 let ticketDetails=[];
 let bookingList =[];
 let isAuthenticated = false;
+let errMsg="";
 //setting up database connection
 const options = {
   host     : process.env.DB_HOST,
@@ -118,7 +121,10 @@ connection.query(findUser,(error,results) => {
      }else{
        user = String(mail);
        isAuthenticated=true;
-       res.redirect('/profile');
+       req.session.data = user;
+       req.session.save(function(){
+         res.redirect('/profile');
+       });
      }
     }
   }
@@ -155,7 +161,11 @@ app.post('/signup',(req,res) => {
       })
     }else{
       userExists = true;
-      res.redirect('/signup');
+      // res.redirect('/signup');
+      req.session.data = user;
+      req.session.save(function(){
+        res.redirect('/profile');
+      });
     }
   }
   })
@@ -165,7 +175,6 @@ app.post('/signup',(req,res) => {
 app.get('/profile',(req,res) => {
  let profileQuery = 'SELECT *FROM customer_data WHERE EMAIL_ID = '+ mysql.escape(user);
  let showBooks = 'SELECT *FROM booking_data WHERE EMAIL_ID = '+ mysql.escape(user);
-
  if(bookingList.length ==0){
   connection.query(showBooks,(error,results) => {
     if(!error){
@@ -184,8 +193,9 @@ app.get('/profile',(req,res) => {
   } 
  });
  }else{
-  res.render('profile',{userInfo:userInfo,bookings:bookingList,isAuthenticated:isAuthenticated});
- }
+  res.render('profile',{userInfo:userInfo,bookings:bookingList,isAuthenticated:isAuthenticated,errMsg:errMsg});
+  errMsg=""; 
+}
 });
 // route handling pages of forgot password
 app.get('/forgotpasswordpg1',(req,res) => {
@@ -438,7 +448,7 @@ app.get('/download',function(req,res){
   });
   // handling logout route 
   app.get('/logout',(req,res) => {
-  isAuthenticated=false;
+  // isAuthenticated=false;
   bookingList=[];
   user="";
   userExists = false;
@@ -446,7 +456,31 @@ app.get('/download',function(req,res){
   details=[];
   passengersData=[];
   ticketDetails=[];
- res.redirect('/');
+  isAuthenticated=false;
+  req.session.destroy(function(){
+    isAuthenticated=false;
+   res.redirect('/');
+  });
+  });
+
+  // route for handling cancel booking 
+  app.get('/cancelbooking',(req,res) => {
+  res.render('cancelbookingpage1');
+  });
+  app.post('/cancelbooking',(req,res) => {
+  connection.query("UPDATE booking_data SET STATUS = ? WHERE BOOKING_ID = ?",["CANCELLED",req.body.bookingid],(error) => {
+    if(!error){
+      errMsg="Successfully cancelled your booking!";
+      bookingList.forEach(book => {
+      if(book.BOOKING_ID == req.body.bookingid){
+        book.STATUS="CANCELLED";
+      }
+      });
+      res.redirect('/profile');
+    }else{
+      res.redirect('/cancelbooking');
+    }
+  });
   });
 //app listening on port 4000
 app.listen(4000, () => console.log('App listening on port 4000!'));

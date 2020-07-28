@@ -2,17 +2,7 @@
 <%- include("partials/authheader") %>
 <div class="container-fluid" id="profile-page">
     <div class="container-custom justify-content-center" id="profile-inner">
-        <div class="row">
-            <div class="col-5 offset-1">
-              <h3 id="location"></h2>
-              <h5 id="temp"> <span id="unit"> &#176C </span> </h5>
-            </div>
-            <div class="col-5 offset-1">
-               <h5 id="humidity"></h5>
-               <h5 id="desc"></h5>
-            </div>
-        </div>
-        
+      
         <div class="row">
             <div class="col-6 offset-2">
                 <% userInfo.forEach(info => { %>
@@ -23,7 +13,7 @@
                 <% }) %>
             </div>
             <div class="col-4">
-             <img src="images/fakeme.jpg" style="height: 100px;border-radius: 50%;width: 100px;">
+             <img src="images/fakeme.png" style="height: 100px;border-radius: 50%;width: 100px;">
             </div>
         </div>
     </div>
@@ -43,8 +33,8 @@
         <tbody>
           <tr>
             <th scope="row"><a href="/edituseremail"><i class="fas fa-user-edit user-edit-icon"></i></a></th>
-            <td>Email</td>
-            <td><%= info.EMAIL_ID %></td>
+            <td>Birthday</td>
+            <td><%= info.BIRTHDAY%></td>
           </tr>
           <tr>
             <th scope="row"><a href="/edituserphone"><i class="fas fa-user-edit user-edit-icon"></i></a></th>
@@ -57,6 +47,15 @@
 </div>
 <div class="container" id="booking-list">
   <h2 class="profile-heading">Your Booking History</h2>
+<% if(errMsg!="") { %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong><%= errMsg %></strong> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+<% } %>
+
   <% if (bookings.length == 0) { %>
     <div class="jumbotron">
       <h1 class="display-4">You have no bookings with us!<i class="far fa-sad-tear"></i></h1>
@@ -91,8 +90,4 @@
   </table>
   <% } %>
 </div>
-
-<!-- create a bookings showing section  -->
-<!-- created a weather api section-->
-<script src="/js/weather.js"></script>
 <%- include("partials/footer") %>

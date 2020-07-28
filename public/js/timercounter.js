@@ -1,4 +1,4 @@
-let countDownString='28 July 2020 12:00:00';
+let countDownString='12 August 2020 12:00:00';
 
 // function to call timer every second 
 setInterval(function(){
