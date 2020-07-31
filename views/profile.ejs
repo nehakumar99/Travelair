@@ -83,7 +83,11 @@
           <td><%= booking.NO_OF_TICKETS %> </td>
           <td><%= booking.BOOKING_DATE %> </td>
           <td><%= booking.TOTAL_PRICE %> </td>
-          <td><%= booking.STATUS %> </td>
+          <% if (booking.STATUS == "SUCCESS") { %>
+            <td style="color: green;"><i class="fas fa-check-square"></i> Success</td>
+          <% }else{ %>
+            <td style="color: red;"><i class="fas fa-window-close"></i> Cancelled</td>
+            <% } %>
         </tr>
       <% }); %>
     </tbody>

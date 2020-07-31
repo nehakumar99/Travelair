@@ -155,17 +155,14 @@ app.post('/signup',(req,res) => {
           connection.query(saveInfo,{EMAIL_ID:mail,PASSWORD:password},(error,results)=>{
             user = String(mail);
             isAuthenticated=true;
-            res.redirect('/profile');
+            req.session.data = user;
+              res.redirect('/profile');
           })
         }
       })
     }else{
       userExists = true;
-      // res.redirect('/signup');
-      req.session.data = user;
-      req.session.save(function(){
-        res.redirect('/profile');
-      });
+      res.redirect('/signup');
     }
   }
   })
@@ -173,29 +170,34 @@ app.post('/signup',(req,res) => {
 
 //handling route for profile
 app.get('/profile',(req,res) => {
- let profileQuery = 'SELECT *FROM customer_data WHERE EMAIL_ID = '+ mysql.escape(user);
- let showBooks = 'SELECT *FROM booking_data WHERE EMAIL_ID = '+ mysql.escape(user);
- if(bookingList.length ==0){
-  connection.query(showBooks,(error,results) => {
-    if(!error){
-    results.forEach(result => {
-     bookingList.push(result);
+  if (isAuthenticated==false) {
+    res.redirect('/');
+  }else{
+    let profileQuery = 'SELECT *FROM customer_data WHERE EMAIL_ID = '+ mysql.escape(user);
+    let showBooks = 'SELECT *FROM booking_data WHERE EMAIL_ID = '+ mysql.escape(user);
+    if(bookingList.length ==0){
+     connection.query(showBooks,(error,results) => {
+       if(!error){
+       results.forEach(result => {
+        bookingList.push({BOOKING_ID:result.BOOKING_ID,NO_OF_TICKETS:result.NO_OF_TICKETS,BOOKING_DATE:String(result.BOOKING_DATE).substr(0,15),STATUS:result.STATUS,TOTAL_PRICE:result.TOTAL_PRICE,FLIGHT_ID:result.FLIGHT_ID,SEAT_CLASS:result.SEAT_CLASS});
+       });
+       if(userInfo.length == 0){
+         connection.query(profileQuery,(error,results) => {
+           if(!error){
+           results.forEach(result => {
+            userInfo.push(result);
+           });
+         } res.redirect('/profile');
+        })
+        }
+     } 
     });
-    if(userInfo.length == 0){
-      connection.query(profileQuery,(error,results) => {
-        if(!error){
-        results.forEach(result => {
-         userInfo.push(result);
-        });
-      } res.redirect('/profile');
-     })
-     }
-  } 
- });
- }else{
-  res.render('profile',{userInfo:userInfo,bookings:bookingList,isAuthenticated:isAuthenticated,errMsg:errMsg});
-  errMsg=""; 
-}
+    }else{
+     res.render('profile',{userInfo:userInfo,bookings:bookingList,isAuthenticated:isAuthenticated,errMsg:errMsg});
+     errMsg=""; 
+   }
+  }
+
 });
 // route handling pages of forgot password
 app.get('/forgotpasswordpg1',(req,res) => {
@@ -264,14 +266,23 @@ res.render('editphone',{isAuthenticated:isAuthenticated});
 });
 
 app.post('/edituserphone',(req,res) => {
-connection.query('UPDATE login_data SET PHONE_NO = ? WHERE EMAIL_ID = ?',[req.body.editphn,user],(error,results) => {
-if(!error) { res.redirect('/profile'); }
+connection.query('UPDATE customer_data SET PHONE_NO = ? WHERE EMAIL_ID = ?',[req.body.editphn,user],(error,results) => {
+if(!error){
+  userInfo.forEach(info => {
+   info.PHONE_NO=req.body.editphn;
+  })
+  res.redirect('/profile');
+}
 });
 });
 
 // route handling the booking page1
 app.get('/bookingpage1',(req,res) => {
-res.render('bookingpage1',{locations:locationRecommendations,flights:flightShow,isAuthenticated:isAuthenticated});
+if(isAuthenticated==false){
+  res.redirect('/');
+}else{
+  res.render('bookingpage1',{locations:locationRecommendations,flights:flightShow,isAuthenticated:isAuthenticated});
+}
 });
 app.post('/bookingpage1',(req,res) => {
 const toLoc = req.body.to;
@@ -448,7 +459,6 @@ app.get('/download',function(req,res){
   });
   // handling logout route 
   app.get('/logout',(req,res) => {
-  // isAuthenticated=false;
   bookingList=[];
   user="";
   userExists = false;
@@ -457,10 +467,8 @@ app.get('/download',function(req,res){
   passengersData=[];
   ticketDetails=[];
   isAuthenticated=false;
-  req.session.destroy(function(){
-    isAuthenticated=false;
+  delete req.session.data;
    res.redirect('/');
-  });
   });
 
   // route for handling cancel booking 
