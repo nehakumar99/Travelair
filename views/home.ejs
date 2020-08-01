@@ -1,8 +1,9 @@
- <% if (isAuthenticated ==true) { %>
+<% if (isAuthenticated ==true) { %>
   <%- include("partials/authheader") %>
  <% }else{ %>
   <%- include("partials/header") %>
   <% } %>
+
     <!-- carousel  -->
     <div id="carouselPages" class="carousel slide carousel-fade" data-ride="carousel">
       <div class="carousel-inner">
@@ -40,7 +41,7 @@
 <!-- this is the recommendation recommendation system  -->
 <div class="container-fluid text-center container-custom" id="recommendation">
   <h1><i class="fas fa-directions"></i>Take a Trip</h1>
-  <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <ul class="nav nav-tabs bg-dark" style="width: fit-content;" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
       <a class="nav-link active" id="domestic-tab" data-toggle="tab" href="#domestic" role="tab" aria-controls="home" aria-selected="true">Take Domestic Trip</a>
     </li>
@@ -54,8 +55,8 @@
       <div class="tabs-area d-flex flex-row justify-content-around">
         <% recommendations.forEach(item => { %>
           <% if (item.TYPE=='DOMESTIC') { %>
-           <div class="card card-location" style="background-image: url('<%= item.URL %>');">
-               <h5 class="card-title-custom"><a href="#" class="btn btn-outline-dark">Book <i class="fas fa-ticket-alt"></i> to <%= item.LOCATION %> </a></h5>
+           <div class="card card-location shadow" data-aos="fade-down" style="background-image: url('<%= item.URL %>');">
+               <h5 class="card-title-custom"><a href="/bookingpage1" class="btn btn-outline-dark">Book <i class="fas fa-ticket-alt"></i> to <%= item.LOCATION %> </a></h5>
            </div>
           <% } %>
          <% }) %>
@@ -65,8 +66,8 @@
      <div class="tabs-area d-flex flex-row justify-content-around">
       <% recommendations.forEach(item => { %>
         <% if (item.TYPE=='INTERNATIONAL') { %>
-          <div class="card card-location" style="background-image: url('<%= item.URL %>');">
-            <h5 class="card-title-custom"> <a href="#" class="btn btn-outline-dark">Book <i class="fas fa-ticket-alt"></i> to <%= item.LOCATION %> </a></h5>          </div>
+          <div class="card card-location shadow" data-aos="fade-down" style="background-image: url('<%= item.URL %>');">
+            <h5 class="card-title-custom"> <a href="/bookingpage1" class="btn btn-outline-dark">Book <i class="fas fa-ticket-alt"></i> to <%= item.LOCATION %> </a></h5>          </div>
          <% } %>
          <% }) %>
      </div>
@@ -77,10 +78,10 @@
   <div class="container-fluid div-content grey-bg" id="service">
       <h1>Our services</h1>
       <div class="row">
-        <div class="col-custom col-12 col-md-6">
+        <div class="col-custom col-12 col-md-6" data-aos="zoom-in-down" >
           <img src="images/easybook.jpg">
         </div>
-        <div class="col-custom col-caption col-12 col-md-6">
+        <div class="col-custom col-caption col-12 col-md-6" data-aos="zoom-in-down">
           <h2>Easy Booking</h2>
           <p>This system allows easy booking of flight tickets without asking for too much of unnecessary details.
             All you need for booking your tickets are valid documents, a device with internet connection and a travel plan.
@@ -90,20 +91,20 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-custom col-caption col-12 col-md-6">
+        <div class="col-custom col-caption col-12 col-md-6" data-aos="zoom-in-down">
           <h2>E-Ticket Available</h2>
           <p>Dont worry about forgetting your tickets anymore.Our website will immediately generate an electronic ticket or soft copy of your ticket which are now acceptable at airports wihtout the need of printing it.This way we make sure that less paper is disposed in our environemnt.
         </p>
         </div>
-        <div class="col-custom col-12 col-md-6">
+        <div class="col-custom col-12 col-md-6" data-aos="zoom-in-down">
           <img src="images/eticket.jpg">
         </div>
       </div>
       <div class="row">
-        <div class="col-custom col-12 col-md-6">
+        <div class="col-custom col-12 col-md-6" data-aos="zoom-in-down">
           <img src="images/cancelled.jpg">
         </div>
-        <div class="col-custom col-caption col-12 col-md-6">
+        <div class="col-custom col-caption col-12 col-md-6" data-aos="zoom-in-down" >
           <h2>Easy Cancellation</h2>
           <p>This system allows easy cancellation of flight tickets.
             All you need for cancelling your tickets are just a few clicks.There shall not be any cancellation charges if booked using Travelair.There are no hidden charges for cancellation of tickets but it must be done 3 days earlier in order to avoid cancellation charges set by the flight you have chosen.
@@ -117,7 +118,7 @@
   <h1>Travelair Creator<i class="fa fa-birthday-cake mr-1 ml-1" aria-hidden="true"></i> Birthday Sale</h1>
   <div class="row justify-content-center">
     <div class="col-auto col-custom">
-      <div class="timer-box">
+      <div class="timer-box" data-aos="flip-left">
         <div class="timer-head">
          <h1 class="time" id="days"></h1>
         </div>
@@ -127,7 +128,7 @@
       </div>
     </div>
     <div class="col-auto col-custom">
-      <div class="timer-box">
+      <div class="timer-box" data-aos="flip-left" >
         <div class="timer-head">
          <h1 class="time" id="hours"></h1>
         </div>
@@ -137,7 +138,7 @@
       </div>
     </div>
     <div class="col-auto col-custom">
-      <div class="timer-box">
+      <div class="timer-box" data-aos="flip-left">
         <div class="timer-head">
          <h1 class="time"id="mins"></h1>
         </div>
@@ -147,7 +148,7 @@
       </div>
     </div>
     <div class="col-auto col-custom">
-      <div class="timer-box">
+      <div class="timer-box" data-aos="flip-left">
         <div class="timer-head">
          <h1 class="time" id="secs"></h1>
         </div>
@@ -165,10 +166,10 @@
 <div class="container-fluid div-content grey-bg" id="about">
   <h1>About Us</h1>
   <div class="row">
-    <div class="col-12 col-md-6 col-custom">
+    <div class="col-12 col-md-6 col-custom" data-aos="zoom-in-down">
       <img src="images/fakeme.jpg">
     </div>
-    <div class="col-12 col-md-6 col-custom col-caption">
+    <div class="col-12 col-md-6 col-custom col-caption" data-aos="zoom-in-down">
       <h3>Neha Kumar, Creator of Travelair</h3>
       <p>I have graduated from Techno Main Saltlake,Kolkata,West Bengal.This project is an improvisation of our final year major project.For this website, I made use of technologies such as PHPMyAdmin,NodeJS,EJS and many more. I have completed my Full Stack Web Development course from Udemy in March,2020. I am currently engaged in learning Full Stack using React from Coursera.</p>
     </div>

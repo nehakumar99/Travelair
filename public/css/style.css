@@ -90,6 +90,11 @@ color: dodgerblue;
     background-image: -webkit-linear-gradient(#0075FE,#42A5F5);
     color: white;
 }
+.credentail-err{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
 
 /* styling our services section  */
 #service h1{

@@ -40,6 +40,7 @@ let ticketDetails=[];
 let bookingList =[];
 let isAuthenticated = false;
 let errMsg="";
+let formMsg="";
 //setting up database connection
 const options = {
   host     : process.env.DB_HOST,
@@ -100,7 +101,7 @@ app.get('/', (req, res) => {
     res.redirect('/'); 
   });
 }else{
- res.render('home',{recommendations:locationRecommendations,isAuthenticated:isAuthenticated});
+ res.render('home',{formMsg:formMsg,recommendations:locationRecommendations,isAuthenticated:isAuthenticated});
   }
 });
 
@@ -113,6 +114,7 @@ connection.query(findUser,(error,results) => {
  if(!error){
    if(results.length == 0){
      userExists = false;
+     formMsg="You have entered wrong email/password";
      res.redirect('/');
    }else{
      for ( let i in results) {
@@ -377,11 +379,13 @@ app.get('/paymentsportal',(req,res) => {
     sqlFetch = `SELECT DISTINCTROW(SELECT flight_data.AIRPORT_ID FROM flight_data WHERE flight_data.FLIGHT_ID=?) AS "AIRPORT_ID",(SELECT flight_data.B_SEAT_AVL FROM flight_data WHERE flight_data.FLIGHT_ID=?) AS "SEATS_AVL",(SELECT airport_data.AIRPORT_NAME FROM airport_data WHERE airport_data.AIRPORT_ID IN (SELECT schedule_data.FROM_AIRPORT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID=?)) AS "FROM_AIRPORT_LOCATION",(SELECT airport_data.AIRPORT_NAME FROM airport_data WHERE airport_data.AIRPORT_ID IN (SELECT schedule_data.TO_AIRPORT_ID FROM schedule_data WHERE schedule_data.FLIGHT_ID=?)) AS "TO_AIRPORT_LOCATION" FROM flight_data,airport_data,schedule_data;`
     flightUpdate = `UPDATE flight_data SET B_SEAT_AVL=? WHERE FLIGHT_ID = ? `;
   }
+  const newBooking = {BOOKING_ID:bookingId,EMAIL_ID:user,NO_OF_TICKETS:passengers,FLIGHT_ID:selected,SEAT_CLASS:seatClass,TOTAL_PRICE:totalPrice,BOOKING_DATE:Date(),STATUS:"SUCCESS"};
   
-  connection.query('INSERT INTO booking_data SET ?',{BOOKING_ID:bookingId,EMAIL_ID:user,NO_OF_TICKETS:passengers,FLIGHT_ID:selected,SEAT_CLASS:seatClass,TOTAL_PRICE:totalPrice,BOOKING_DATE:Date(),STATUS:"SUCCESS"},function(error,results) {
+  connection.query('INSERT INTO booking_data SET ?',newBooking,function(error,results) {
   if(!error)
   {
   console.log("INSERTED INTO BOOKING DATA");
+  bookingList.push(newBooking);
   }});
   
   connection.query(sqlFetch,[selected,selected,selected,selected], function(error,results){
