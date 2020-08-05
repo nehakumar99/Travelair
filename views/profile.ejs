@@ -4,7 +4,7 @@
     <div class="container-custom justify-content-center" id="profile-inner">
       
         <div class="row">
-            <div class="col-6 offset-2">
+            <div class="col-8">
                 <% userInfo.forEach(info => { %>
                     <h2><i class="fas fa-user-circle"></i> <%= info.FIRST_NAME %> <%= info.LAST_NAME %> </h2>
                     <h6><i class="far fa-envelope"></i> <%= info.EMAIL_ID %> </h6>
@@ -48,7 +48,7 @@
 <div class="container" id="booking-list">
   <h2 class="profile-heading">Your Booking History</h2>
 <% if(formMsg!="") { %>
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
     <strong><%= formMsg %></strong> 
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
