@@ -1,1 +1,2 @@
-This project uses technologies such as - HTML5, CSS3,BOOTSTRAP4,JAVASCRIPT,NODE.JS,EXPRESS.JS,PHPMyAdmin(SQL),EJS
+This project uses technologies such as - HTML5, CSS3,BOOTSTRAP4.5,JAVASCRIPT,JQuery,NODE.JS,EXPRESS.JS,PHPMyAdmin(SQL),EJS and npm packages like nodemailer , html-pdf
+, otp-generator,etc.
