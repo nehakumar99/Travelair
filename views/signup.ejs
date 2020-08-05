@@ -1,17 +1,17 @@
 <%- include("partials/header") %>
 
 <div class="container-fluid align-items-center justify-content-center" id="signup-container">
-  <h1 class="text-center">Sign Up with <i class="fa fa-plane-departure"></i>Travelair</h1>
+  <h1 class="text-center" data-aos="fade-down" >Sign Up with <i class="fa fa-plane-departure"></i>Travelair</h1>
   <div class="row justify-content-center">
-<div class="col-sm-12 col-md-4" id="signup-img"></div>
-<div class="col-sm-12 col-md-6">
+<div class="col-sm-12 col-md-4" id="signup-img" data-aos="fade-down"></div>
+<div class="col-sm-12 col-md-6" data-aos="fade-down">
   <form action="/signup" class="bg-light" id="signup-form" style="padding: 10px; border-radius: 4px;" method="POST">
     <div class="row">
      <div class="col-12 col-custom col-md-4">
       <label>First Name</label>
      </div>
      <div class="col-12 col-custom col-md-8">
-       <input type="text" name="userfname" class="userinput form-control" id="fname">
+       <input type="text" name="userfname" class="userinput form-control" id="fname" required>
         <small id="fname-invalid" class="feedback"></small>
      </div>
     </div>
@@ -20,7 +20,7 @@
        <label>Last Name</label>
       </div>
       <div class="col-12 col-custom col-md-8">
-        <input type="text" name="userlname" class="userinput form-control" id="lname">
+        <input type="text" name="userlname" class="userinput form-control" id="lname" required>
         <small id="lname-invalid" class="feedback"></small>
       </div>
      </div>
@@ -29,8 +29,11 @@
        <label>Email</label>
       </div>
       <div class="col-12 col-custom col-md-8">
-        <input type="text" name="userEmail" class="userinput form-control" id="email">
+        <input type="text" name="userEmail" class="userinput form-control" id="email" required>
         <small id="email-invalid" class="feedback"></small>
+        <% if (userExists==true) { %>
+          <small id="email-invalid" class="feedback">Email already registered</small>         
+        <% } %>
       </div>
      </div>
      <div class="row">
@@ -38,7 +41,7 @@
        <label>Mobile Number</label>
       </div>
       <div class="col-12 col-custom col-md-8">
-        <input type="text" name="userphn" class="userinput form-control" id="phn">
+        <input type="text" name="userphn" class="userinput form-control" id="phn" required>
         <small id="phn-invalid" class="feedback"></small>
       </div>
      </div>
@@ -47,7 +50,7 @@
           <label>Date of Birth</label>
        </div>
        <div class="col-12 col-custom col-md-8">
-         <input type="date" name="userbday" class="userinput form-control" id="bday">
+         <input type="date" name="userbday" class="userinput form-control" id="bday" required>
          <small id="bday-invalid" class="feedback"></small>
         </div>
      </div>
@@ -56,7 +59,7 @@
          <label >Password</label>
        </div>
        <div class="col-12 col-custom col-md-8">
-         <input type="password" name="userpass" class="userinput form-control" id="pass">
+         <input type="password" name="userpass" class="userinput form-control" id="pass" required>
          <small id="password-invalid" class="feedback"></small>
         </div>
      </div>
@@ -65,7 +68,7 @@
          <label>Confirm Password</label>
        </div>
        <div class="col-12 col-custom col-md-8">
-         <input type="password" name="confrmpass" class="userinput form-control" id="confirmpass">
+         <input type="password" name="confrmpass" class="userinput form-control" id="confirmpass" required>
          <small id="confirmpass-invalid" class="feedback"></small>
         </div>
      </div>

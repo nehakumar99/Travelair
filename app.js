@@ -10,8 +10,6 @@ const nodemailer = require('nodemailer');
 const pdf = require('html-pdf');
 const path = require('path');
 const uniqid = require('uniqid');
-const { CANCELLED } = require('dns');
-const { log } = require('console');
 const Date = require(__dirname + "/date.js");
 
 // setting up the app constant which will make use of express module 
@@ -23,7 +21,7 @@ app.use(express.static(__dirname + '/public'));
 
 //globally used variables
 let locationRecommendations=[];
-let userExists = false;
+let userExists;
 let user;
 let editUser;
 let userInfo =[];
@@ -41,6 +39,7 @@ let bookingList =[];
 let isAuthenticated = false;
 let errMsg="";
 let formMsg="";
+let notFound=false;
 //setting up database connection
 const options = {
   host     : process.env.DB_HOST,
@@ -97,18 +96,21 @@ app.get('/', (req, res) => {
         results.forEach(result => {
         locationRecommendations.push(result);   
         });
+        res.redirect('/');
       }
-    res.redirect('/'); 
   });
-}else{
+} 
+else{
  res.render('home',{formMsg:formMsg,recommendations:locationRecommendations,isAuthenticated:isAuthenticated});
   }
+  formMsg="";
 });
 
 // handling route for login 
 app.post('/login',(req,res) => {
 const mail = req.body.useremail;
 const password = req.body.userpassword;
+let storedPass;
 let findUser = 'SELECT *FROM login_data WHERE EMAIL_ID ='+mysql.escape(mail);
 connection.query(findUser,(error,results) => {
  if(!error){
@@ -117,25 +119,28 @@ connection.query(findUser,(error,results) => {
      formMsg="You have entered wrong email/password";
      res.redirect('/');
    }else{
+     userExists = true;
      for ( let i in results) {
-     if(results[i].PASSWORD != password){
+       storedPass=results[i].PASSWORD;
+     }
+     if( storedPass!= password){
+      formMsg="You have entered wrong email/password";
        res.redirect('/');
      }else{
-       user = String(mail);
-       isAuthenticated=true;
-       req.session.data = user;
-       req.session.save(function(){
-         res.redirect('/profile');
-       });
+       formMsg="";
+      user = String(mail);
+      isAuthenticated=true;
+      req.session.data = user;
+      res.redirect('/profile');
      }
     }
   }
- }
 })
 });
 //handling route for sign-up
 app.get('/signup',(req,res) => {
-res.render('signup');
+res.render('signup',{userExists:userExists});
+userExists=false;
 });
 app.post('/signup',(req,res) => {
   //storing the values for user sign up
@@ -154,11 +159,15 @@ app.post('/signup',(req,res) => {
       connection.query(register,{EMAIL_ID:mail,FIRST_NAME:fname,LAST_NAME:lname,PHONE_NO:phn,BIRTHDAY:bday},(error,results)=> {
         if(!error){
           let saveInfo = 'INSERT INTO login_data SET ?';
-          connection.query(saveInfo,{EMAIL_ID:mail,PASSWORD:password},(error,results)=>{
+          connection.query(saveInfo,{EMAIL_ID:mail,PASSWORD:password},(error)=>{
+           if(!error){
             user = String(mail);
             isAuthenticated=true;
             req.session.data = user;
-              res.redirect('/profile');
+            res.redirect('/profile');
+           }else{
+             console.log(error);
+           }
           })
         }
       })
@@ -172,34 +181,33 @@ app.post('/signup',(req,res) => {
 
 //handling route for profile
 app.get('/profile',(req,res) => {
-  if (isAuthenticated==false) {
-    res.redirect('/');
+  let profileQuery = 'SELECT *FROM customer_data WHERE EMAIL_ID = '+ mysql.escape(user);
+  let showBooks = 'SELECT *FROM booking_data WHERE EMAIL_ID = '+ mysql.escape(user);
+  if(isAuthenticated==false){
+    res.redirect('/signup');
   }else{
-    let profileQuery = 'SELECT *FROM customer_data WHERE EMAIL_ID = '+ mysql.escape(user);
-    let showBooks = 'SELECT *FROM booking_data WHERE EMAIL_ID = '+ mysql.escape(user);
-    if(bookingList.length ==0){
-     connection.query(showBooks,(error,results) => {
-       if(!error){
-       results.forEach(result => {
-        bookingList.push({BOOKING_ID:result.BOOKING_ID,NO_OF_TICKETS:result.NO_OF_TICKETS,BOOKING_DATE:String(result.BOOKING_DATE).substr(0,15),STATUS:result.STATUS,TOTAL_PRICE:result.TOTAL_PRICE,FLIGHT_ID:result.FLIGHT_ID,SEAT_CLASS:result.SEAT_CLASS});
-       });
-       if(userInfo.length == 0){
-         connection.query(profileQuery,(error,results) => {
+    errMsg="";
+     if(userInfo.length==0){
+        connection.query(profileQuery,(error,results) => {
            if(!error){
            results.forEach(result => {
             userInfo.push(result);
            });
-         } res.redirect('/profile');
-        })
-        }
-     } 
-    });
-    }else{
-     res.render('profile',{userInfo:userInfo,bookings:bookingList,isAuthenticated:isAuthenticated,errMsg:errMsg});
-     errMsg=""; 
-   }
-  }
-
+         }
+       connection.query(showBooks,(error,results) => {
+        if(!error){
+       results.forEach(result => {
+        bookingList.push({BOOKING_ID:result.BOOKING_ID,NO_OF_TICKETS:result.NO_OF_TICKETS,BOOKING_DATE:String(result.BOOKING_DATE).substr(0,15),STATUS:result.STATUS,TOTAL_PRICE:result.TOTAL_PRICE,FLIGHT_ID:result.FLIGHT_ID,SEAT_CLASS:result.SEAT_CLASS});
+       });
+      }
+      });
+        res.redirect('/profile');
+  });
+}else{
+       res.render('profile',{formMsg:formMsg,userInfo:userInfo,bookings:bookingList,isAuthenticated:isAuthenticated,errMsg:errMsg});
+}
+}
+formMsg="";
 });
 // route handling pages of forgot password
 app.get('/forgotpasswordpg1',(req,res) => {
@@ -283,7 +291,7 @@ app.get('/bookingpage1',(req,res) => {
 if(isAuthenticated==false){
   res.redirect('/');
 }else{
-  res.render('bookingpage1',{locations:locationRecommendations,flights:flightShow,isAuthenticated:isAuthenticated});
+  res.render('bookingpage1',{notFound:notFound,locations:locationRecommendations,flights:flightShow,isAuthenticated:isAuthenticated});
 }
 });
 app.post('/bookingpage1',(req,res) => {
@@ -309,10 +317,14 @@ else
 connection.query(sql,[fromLoc,toLoc,fromLoc,toLoc,fromLoc,toLoc,fromLoc,toLoc,passengers,boardingDate],function(error,results)
 {
 if(!error)
-{    
-      results.forEach(result => {
+{    if(results.length==0){
+      notFound=true;
+     }else{
+       notFound=false;
+       results.forEach(result => {
         flightShow.push(result);
       });
+     }
   res.redirect('/bookingpage1');
  }
 });
@@ -386,6 +398,8 @@ app.get('/paymentsportal',(req,res) => {
   {
   console.log("INSERTED INTO BOOKING DATA");
   bookingList.push(newBooking);
+  }else{
+    console.log(error);
   }});
   
   connection.query(sqlFetch,[selected,selected,selected,selected], function(error,results){
@@ -465,10 +479,10 @@ app.get('/download',function(req,res){
   app.get('/logout',(req,res) => {
   bookingList=[];
   user="";
-  userExists = false;
   flightShow =[];
   details=[];
   passengersData=[];
+  userInfo=[];
   ticketDetails=[];
   isAuthenticated=false;
   delete req.session.data;
@@ -482,7 +496,7 @@ app.get('/download',function(req,res){
   app.post('/cancelbooking',(req,res) => {
   connection.query("UPDATE booking_data SET STATUS = ? WHERE BOOKING_ID = ?",["CANCELLED",req.body.bookingid],(error) => {
     if(!error){
-      errMsg="Successfully cancelled your booking!";
+      formMsg="Successfully cancelled your booking!";
       bookingList.forEach(book => {
       if(book.BOOKING_ID == req.body.bookingid){
         book.STATUS="CANCELLED";

@@ -3,21 +3,31 @@
  <% }else{ %>
   <%- include("partials/header") %>
   <% } %>
+  <% if (formMsg!="") { %>
+    <div class="alert alert-danger alert-dismissible fade show" id="error-alert" role="alert">
+      <strong><%= formMsg %></strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <% } %>
 
     <!-- carousel  -->
     <div id="carouselPages" class="carousel slide carousel-fade" data-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active data-interval=2000">
           <img src="images/carouselpic1.jpg" class="d-block w-100">
-          <div class="carousel-caption">
-            <h1> <i class="fas fa-plane-departure"></i><span>T</span>ravelair</h1>
-            <p>Your complete flight booking partner</p>
+          <div class="carousel-caption" data-aos="fade-down">
+            <h1><i class="fas fa-plane-departure"></i><span>T</span>ravelair</h1>
+            <div data-aos="fade-down" data-aos-delay="500">
+              <p>Your complete flight booking partner</p>
+            </div>
           </div>
         </div>
         <div class="carousel-item data-interval=2000">
           <img src="images/carouselpic2.jpg" class="d-block w-100">
           <div class="carousel-caption carousel-caption-custom">
-            <h4>Welcome to our service!Please login or signup.</h4>
+            <h4>Welcome to our service!Please login or signup</h4>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Login</button>
            <a href="/signup"><button type="button" class="btn bg-dark" style="color: white;">Sign Up</button></a> 
           </div>
@@ -170,8 +180,8 @@
       <img src="images/fakeme.jpg">
     </div>
     <div class="col-12 col-md-6 col-custom col-caption" data-aos="zoom-in-down">
-      <h3>Neha Kumar, Creator of Travelair</h3>
-      <p>I have graduated from Techno Main Saltlake,Kolkata,West Bengal.This project is an improvisation of our final year major project.For this website, I made use of technologies such as PHPMyAdmin,NodeJS,EJS and many more. I have completed my Full Stack Web Development course from Udemy in March,2020. I am currently engaged in learning Full Stack using React from Coursera.</p>
+      <h3>Neha Kumar, Developer</h3>
+      <p>I have graduated from Techno Main Saltlake,Kolkata,West Bengal.This project is an improvisation of our final year major project. I have completed my Full Stack Web Development course from Udemy in March,2020. I am currently engaged in learning Full Stack using React from Coursera.</p>
     </div>
   </div>
 </div>

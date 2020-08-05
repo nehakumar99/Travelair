@@ -2,7 +2,7 @@
 <div class="container-fluid text-center container-custom" style="padding-top: 100px;">
     <h1 class="text-white bottom-line">Book Ticket <i class="fas fa-ticket-alt"></i> </h1>
     <small class="text-white">Please be carefull while filling your details.</small>
-    <form action="/bookingpage1" method="POST" class="text-white bg-dark booking-form" style="padding: 10px;">
+    <form action="/bookingpage1"  data-aos="fade-down" method="POST" class="text-white bg-dark booking-form" style="padding: 10px;">
         <div class="row form-row">
             <div class="col-2 col-custom">
                 <label>From</label>           
@@ -56,10 +56,10 @@
 </div>
 <!-- show this as flight search options  -->
 <div class="container div-content justify-items-center">
-    <small style="color: red;">Showing results</small> <br>
-    <% if (flights.length==0) { %>
+    <small style="color: red;">search results will be displayed here</small> <br>
+    <% if (notFound==true) { %>
         <small style="color: red;">No flights available for this location</small>
-    <% } %>
+    <% }%>
     <div class="row">
 <% flights.forEach(flight => { %>
         <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
